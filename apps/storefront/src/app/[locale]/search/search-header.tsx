@@ -72,22 +72,6 @@ export function SearchHeader({ searchTerm, totalResults, sortOptions = defaultSo
         </div>
 
         <div className="flex items-center gap-3 ml-auto">
-          {/* Sort Dropdown */}
-          <div className="relative flex items-center">
-            <select
-              value={currentSort}
-              onChange={(e) => handleSortChange(e.target.value)}
-              className="h-10 px-3 pr-8 rounded-lg border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
-            >
-              {sortOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-            <ArrowUpDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
-          </div>
-
           {/* View Toggle */}
           <div className="flex items-center border rounded-lg overflow-hidden">
             <button
