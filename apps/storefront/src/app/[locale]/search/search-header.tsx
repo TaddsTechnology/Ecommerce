@@ -3,31 +3,30 @@
 import { useRouter, usePathname } from '@/i18n/navigation';
 import { useSearchParams } from 'next/navigation';
 import { useTransition, useState, type ReactNode } from 'react';
-import { ArrowUpDown, Grid3X3, List, X, SlidersHorizontal } from 'lucide-react';
+import { Grid3X3, List, X, SlidersHorizontal, ArrowUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTranslations } from 'next-intl';
 
 interface SearchHeaderProps {
   searchTerm: string;
   totalResults: number;
-  sortOptions?: Array<{ value: string; label: string }>;
 }
 
-const defaultSortOptions = [
-  { value: ' Featured', label: 'Featured' },
+const sortOptions = [
+  { value: 'name-asc', label: 'Name: A to Z' },
+  { value: 'name-desc', label: 'Name: Z to A' },
   { value: 'price-asc', label: 'Price: Low to High' },
   { value: 'price-desc', label: 'Price: High to Low' },
-  { value: ' newest', label: 'Newest' },
 ];
 
-export function SearchHeader({ searchTerm, totalResults, sortOptions = defaultSortOptions }: SearchHeaderProps) {
+export function SearchHeader({ searchTerm, totalResults }: SearchHeaderProps) {
   const t = useTranslations('Search');
   const [isPending, startTransition] = useTransition();
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
 
-  const currentSort = (searchParams.get('sort') as string) || ' Featured';
+  const currentSort = (searchParams.get('sort') as string) || 'name-asc';
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   const handleSortChange = (sort: string) => {
@@ -59,19 +58,30 @@ export function SearchHeader({ searchTerm, totalResults, sortOptions = defaultSo
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 mt-16 sm:mt-20">
       {/* Header Row */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-bold">
-            {searchTerm ? searchTerm : 'All Products'}
-          </h1>
-          <p className="text-sm text-gray-500 mt-1">
-            {totalResults} {totalResults === 1 ? 'product' : 'products'} found
-          </p>
-        </div>
+        <h1 className="text-2xl md:text-3xl font-bold">
+          {searchTerm ? searchTerm : 'All Products'}
+        </h1>
 
         <div className="flex items-center gap-3 ml-auto">
+          {/* Sort Dropdown */}
+          <div className="relative flex items-center">
+            <select
+              value={currentSort}
+              onChange={(e) => handleSortChange(e.target.value)}
+              className="h-10 pl-3 pr-8 rounded-lg border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer appearance-none"
+            >
+              {sortOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            <ArrowUpDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+          </div>
+
           {/* View Toggle */}
           <div className="flex items-center border rounded-lg overflow-hidden">
             <button

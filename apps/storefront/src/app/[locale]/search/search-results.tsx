@@ -51,11 +51,11 @@ export async function SearchResults({searchParams}: SearchResultsProps) {
             </Suspense>
 
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mt-6">
-                {/* Filters Sidebar - Desktop */}
-                <aside className="hidden lg:block lg:col-span-1">
+                {/* Filters Sidebar */}
+                <aside className="lg:col-span-1">
                     <div className="sticky top-24">
                         <Suspense fallback={<div className="h-64 animate-pulse bg-gray-100 rounded-lg"/>}>
-                            <FacetFilters productDataPromise={productDataPromise}/>
+                            <FacetFilters searchResult={searchResult}/>
                         </Suspense>
                     </div>
                 </aside>
