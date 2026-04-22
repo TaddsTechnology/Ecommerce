@@ -3,9 +3,7 @@ import {Suspense} from 'react';
 import {getRouteLocale} from '@/i18n/server';
 import {getTranslations} from 'next-intl/server';
 import {LoginForm} from "./login-form";
-import {Card, CardContent, CardFooter} from "@/components/ui/card";
-import {Skeleton} from "@/components/ui/skeleton";
-import {SITE_NAME} from "@/lib/metadata";
+import Link from 'next/link';
 
 export async function generateMetadata(): Promise<Metadata> {
     const locale = await getRouteLocale();
@@ -17,25 +15,17 @@ export async function generateMetadata(): Promise<Metadata> {
 
 function LoginFormSkeleton() {
     return (
-        <Card>
-            <CardContent className="space-y-4 pt-6">
-                <div className="space-y-2">
-                    <Skeleton className="h-4 w-12"/>
-                    <Skeleton className="h-10 w-full"/>
-                </div>
-                <div className="space-y-2">
-                    <Skeleton className="h-4 w-16"/>
-                    <Skeleton className="h-10 w-full"/>
-                </div>
-                <Skeleton className="h-10 w-full"/>
-            </CardContent>
-            <CardFooter className="flex flex-col space-y-4">
-
-                <div className="flex flex-col items-center space-y-2">
-                    <Skeleton className="h-4 w-40"/>
-                </div>
-            </CardFooter>
-        </Card>
+        <div className="space-y-4">
+            <div className="space-y-2">
+                <div className="h-4 w-20 bg-[var(--color-grey-200)] rounded"></div>
+                <div className="h-12 w-full bg-[var(--color-grey-100)] rounded-lg"></div>
+            </div>
+            <div className="space-y-2">
+                <div className="h-4 w-24 bg-[var(--color-grey-200)] rounded"></div>
+                <div className="h-12 w-full bg-[var(--color-grey-100)] rounded-lg"></div>
+            </div>
+            <div className="h-12 w-full bg-[var(--color-grey-200)] rounded-full"></div>
+        </div>
     );
 }
 
@@ -47,45 +37,28 @@ async function SignInContent({searchParams}: { searchParams: Promise<Record<stri
 }
 
 export default async function SignInPage({searchParams}: PageProps<'/[locale]/sign-in'>) {
-    const locale = await getRouteLocale();
-    const t = await getTranslations({locale, namespace: 'Auth'});
-
     return (
-        <div className="flex min-h-[calc(100vh-4rem)] mt-16">
-            {/* Branded panel - desktop only */}
-            <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-primary to-primary/70 items-center justify-center p-12 rounded-br-3xl">
-                <div className="max-w-md text-primary-foreground space-y-6">
-                    <h2 className="text-4xl font-bold tracking-tight">{SITE_NAME}</h2>
-                    <p className="text-xl text-primary-foreground/80 leading-relaxed">
-                        {t('welcomeBack')}
+        <div className="min-h-screen bg-gray-50 flex pt-16">
+            {/* Left side - Image */}
+            <div className="hidden lg:flex lg:w-1/2 bg-gray-900 items-center justify-center p-12">
+                <div className="text-center text-white">
+                    <h2 className="text-4xl lg:text-6xl font-bold uppercase tracking-tight">
+                        Welcome<br/>Back
+                    </h2>
+                    <p className="mt-4 text-lg text-white/70">
+                        Sign in to your account
                     </p>
-                    <div className="flex gap-8 pt-4">
-                        <div>
-                            <p className="text-3xl font-bold">{t('featureFast')}</p>
-                            <p className="text-sm text-primary-foreground/70">{t('featureCheckout')}</p>
-                        </div>
-                        <div>
-                            <p className="text-3xl font-bold">{t('featureSecure')}</p>
-                            <p className="text-sm text-primary-foreground/70">{t('featurePayments')}</p>
-                        </div>
-                        <div>
-                            <p className="text-3xl font-bold">{t('featureEasy')}</p>
-                            <p className="text-sm text-primary-foreground/70">{t('featureReturns')}</p>
-                        </div>
-                    </div>
                 </div>
             </div>
 
-            {/* Form panel */}
+            {/* Right side - Form */}
             <div className="flex w-full lg:w-1/2 items-center justify-center px-4 py-12">
-                <div className="w-full max-w-md space-y-6">
-                    <div className="space-y-2 text-center">
-                        <p className="text-sm font-medium text-primary tracking-wider uppercase lg:hidden">{SITE_NAME}</p>
-                        <h1 className="text-3xl font-bold">{t('signIn')}</h1>
-                        <p className="text-muted-foreground">
-                            {t('enterCredentials')}
-                        </p>
+                <div className="w-full max-w-md">
+                    <div className="text-center mb-8">
+                        <h1 className="text-3xl font-bold uppercase tracking-wide">Sign In</h1>
+                        <p className="mt-2 text-[var(--color-text-secondary)]">Enter your credentials</p>
                     </div>
+                    
                     <Suspense fallback={<LoginFormSkeleton/>}>
                         <SignInContent searchParams={searchParams}/>
                     </Suspense>

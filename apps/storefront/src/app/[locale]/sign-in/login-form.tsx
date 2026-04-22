@@ -2,41 +2,24 @@
 
 import {useState, useTransition} from 'react';
 import {useForm} from 'react-hook-form';
-import {zodResolver} from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import {loginAction} from './actions';
-import {Button} from '@/components/ui/button';
 import {Input} from '@/components/ui/input';
-import {Card, CardContent, CardFooter} from '@/components/ui/card';
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from '@/components/ui/form';
 import { Link } from '@/i18n/navigation';
-import {useTranslations} from 'next-intl';
 
-const loginSchema = z.object({
-    username: z.email('Please enter a valid email address'),
-    password: z.string().min(1, 'Password is required'),
-});
-
-type LoginFormData = z.infer<typeof loginSchema>;
+type LoginFormData = {
+    username: string;
+    password: string;
+};
 
 interface LoginFormProps {
     redirectTo?: string;
 }
 
 export function LoginForm({redirectTo}: LoginFormProps) {
-    const t = useTranslations('Auth');
     const [isPending, startTransition] = useTransition();
     const [serverError, setServerError] = useState<string | null>(null);
 
     const form = useForm<LoginFormData>({
-        resolver: zodResolver(loginSchema),
         defaultValues: {
             username: '',
             password: '',
@@ -61,81 +44,52 @@ export function LoginForm({redirectTo}: LoginFormProps) {
         });
     };
 
-    const registerHref = redirectTo
-        ? `/register?redirectTo=${encodeURIComponent(redirectTo)}`
-        : '/register';
-
     return (
-        <Card>
-            <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)}>
-                    <CardContent className="space-y-4">
-                        <FormField
-                            control={form.control}
-                            name="username"
-                            render={({field}) => (
-                                <FormItem>
-                                    <FormLabel>{t('email')}</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            type="email"
-                                            placeholder="you@example.com"
-                                            disabled={isPending}
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage/>
-                                </FormItem>
-                            )}
-                        />
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+            <div className="space-y-2">
+                <label className="text-sm font-medium">Email</label>
+                <Input
+                    type="email"
+                    placeholder="your@email.com"
+                    disabled={isPending}
+                    {...form.register('username')}
+                    className="h-12 rounded-lg bg-[var(--color-grey-100)] border-0 focus-visible:ring-2"
+                />
+                {form.formState.errors.username && (
+                    <p className="text-sm text-[var(--color-error)]">{form.formState.errors.username.message}</p>
+                )}
+            </div>
 
-                        <FormField
-                            control={form.control}
-                            name="password"
-                            render={({field}) => (
-                                <FormItem>
-                                    <div className="flex items-center justify-between">
-                                        <FormLabel>{t('password')}</FormLabel>
-                                        <Link
-                                            href="/forgot-password"
-                                            className="text-muted-foreground hover:text-primary text-sm"
-                                        >
-                                            {t('forgotPassword')}
-                                        </Link>
-                                    </div>
+            <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                    <label className="text-sm font-medium">Password</label>
+                    <Link href="/forgot-password" className="text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-primary)]">
+                        Forgot?
+                    </Link>
+                </div>
+                <Input
+                    type="password"
+                    placeholder="••••••••"
+                    disabled={isPending}
+                    {...form.register('password')}
+                    className="h-12 rounded-lg bg-[var(--color-grey-100)] border-0 focus-visible:ring-2"
+                />
+                {form.formState.errors.password && (
+                    <p className="text-sm text-[var(--color-error)]">{form.formState.errors.password.message}</p>
+                )}
+            </div>
 
-                                    <FormControl>
-                                        <Input
-                                            type="password"
-                                            placeholder="••••••••"
-                                            disabled={isPending}
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage/>
-                                </FormItem>
-                            )}
-                        />
+            {serverError && (
+                <div className="text-sm text-[var(--color-error)]">{serverError}</div>
+            )}
 
-                        {serverError && (
-                            <div className="text-sm text-destructive">
-                                {serverError}
-                            </div>
-                        )}
-                        <Button type="submit" className="w-full" disabled={isPending}>
-                            {isPending ? t('signingIn') : t('signIn')}
-                        </Button>
-                    </CardContent>
-                    <CardFooter className="flex flex-col space-y-4 mt-2">
-                        <div className="text-muted-foreground text-sm text-center">
-                            {t('noAccount')}{' '}
-                            <Link href={registerHref} className="hover:text-primary underline">
-                                {t('register')}
-                            </Link>
-                        </div>
-                    </CardFooter>
-                </form>
-            </Form>
-        </Card>
+            <button
+                type="submit"
+                disabled={isPending}
+                className="w-full h-12 bg-[var(--color-primary)] text-white rounded-[30px] font-medium hover:opacity-90 disabled:opacity-50"
+            >
+                {isPending ? 'Signing in...' : 'Sign In'}
+            </button>
+        </form>
     );
 }

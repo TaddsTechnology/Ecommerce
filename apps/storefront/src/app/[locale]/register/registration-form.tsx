@@ -2,8 +2,6 @@
 
 import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import { registerAction } from './actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -19,21 +17,14 @@ import {
 import { Link } from '@/i18n/navigation';
 import {useTranslations} from 'next-intl';
 
-function createRegistrationSchema(t: ReturnType<typeof useTranslations<'Auth'>>) {
-    return z.object({
-        emailAddress: z.string().email(t('emailValidation')),
-        firstName: z.string().optional(),
-        lastName: z.string().optional(),
-        phoneNumber: z.string().optional(),
-        password: z.string().min(8, t('passwordMinLength')),
-        confirmPassword: z.string(),
-    }).refine((data) => data.password === data.confirmPassword, {
-        message: t('passwordsMismatch'),
-        path: ["confirmPassword"],
-    });
-}
-
-type RegistrationFormData = z.infer<ReturnType<typeof createRegistrationSchema>>;
+type RegistrationFormData = {
+    emailAddress: string;
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    password: string;
+    confirmPassword: string;
+};
 
 interface RegistrationFormProps {
     redirectTo?: string;
@@ -44,9 +35,7 @@ export function RegistrationForm({ redirectTo }: RegistrationFormProps) {
     const [isPending, startTransition] = useTransition();
     const [serverError, setServerError] = useState<string | null>(null);
 
-    const registrationSchema = createRegistrationSchema(t);
     const form = useForm<RegistrationFormData>({
-        resolver: zodResolver(registrationSchema),
         defaultValues: {
             emailAddress: '',
             firstName: '',
