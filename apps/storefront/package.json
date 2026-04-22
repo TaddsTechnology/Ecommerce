@@ -4,11 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev --port 3001",
-    "build": "npm rebuild @parcel/watcher-linux-x64-glibc && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "check-types": "tsc --noEmit",
-    "postinstall": "npm rebuild @parcel/watcher-linux-x64-glibc 2>/dev/null || true"
+    "check-types": "tsc --noEmit"
   },
   "dependencies": {
     "@base-ui/react": "^1.3.0",
