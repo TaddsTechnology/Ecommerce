@@ -71,7 +71,7 @@ export function SearchHeader({ searchTerm, totalResults, sortOptions = defaultSo
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 ml-auto">
           {/* Sort Dropdown */}
           <div className="relative flex items-center gap-2">
             <label className="text-sm text-gray-500 hidden sm:block">Sort by:</label>

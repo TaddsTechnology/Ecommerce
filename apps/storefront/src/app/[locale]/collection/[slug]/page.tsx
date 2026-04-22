@@ -116,12 +116,13 @@ export default async function CollectionPage({params, searchParams}: PageProps<'
     const page = getCurrentPage(searchParamsResolved);
 
     const productData = await getCollectionProducts(slug, searchParamsResolved, currencyCode);
-    const totalItems = productData.search.totalItems;
+    const searchResult = productData?.data?.search;
+    const totalItems = searchResult?.totalItems ?? 0;
     const collectionResult = await getCollectionMetadata(slug);
     const collectionName = collectionResult.data.collection?.name ?? slug;
 
     const translations = {
-        productCount: t('productCount', { count: totalItems }),
+        productCount: totalItems === 1 ? '1 product found' : `${totalItems} products found`,
         noProductsFound: t('noProductsFound'),
     };
 

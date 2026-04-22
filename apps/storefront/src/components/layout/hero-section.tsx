@@ -68,12 +68,12 @@ export function HeroSection({ content }: { content?: HeroContent }) {
                         className="mt-8 flex flex-wrap gap-4"
                     >
                         <ShimmerButton>
-                            <Link href="/search" className="text-white font-medium">
+                            <Link href="/search?q=all" className="text-white font-medium">
                                 {t.shopNow}
                             </Link>
                         </ShimmerButton>
                         <Link
-                            href="/search"
+                            href="/collection/new-arrivals"
                             className="inline-flex items-center justify-center px-8 py-4 text-[var(--color-text-secondary)] font-medium hover:text-[var(--color-primary)] transition-colors"
                         >
                             Learn More
