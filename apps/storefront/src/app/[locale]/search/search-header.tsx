@@ -60,7 +60,7 @@ export function SearchHeader({ searchTerm, totalResults, sortOptions = defaultSo
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 mt-16 sm:mt-20">
       {/* Header Row */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
