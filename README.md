@@ -46,7 +46,7 @@ npm run dev:storefront
 Use these credentials to log in to the Vendure Dashboard:
 
 - **Username**: superadmin
-- **Password**: superadmin
+- **Password**: superadmin 
 
 ## Production Build
 
