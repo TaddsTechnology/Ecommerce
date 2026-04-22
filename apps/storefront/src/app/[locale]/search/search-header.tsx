@@ -67,9 +67,6 @@ export function SearchHeader({ searchTerm, totalResults, sortOptions = defaultSo
           <h1 className="text-2xl md:text-3xl font-bold">
             {searchTerm ? searchTerm : 'All Products'}
           </h1>
-          <p className="text-sm text-gray-500 mt-1">
-            {totalResults} {totalResults === 1 ? 'product' : 'products'} found
-          </p>
         </div>
 
         <div className="flex items-center gap-3 ml-auto">

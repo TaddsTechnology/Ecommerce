@@ -3,7 +3,6 @@
 import {useRef} from 'react';
 import {ProductCard} from './product-card';
 import {Pagination} from '@/components/shared/pagination';
-import {SortDropdown} from './sort-dropdown';
 import {useGSAP} from '@gsap/react';
 import gsap from 'gsap';
 
@@ -59,13 +58,6 @@ export function ProductGrid({searchResult, currentPage, take, totalItems, t}: Pr
 
     return (
         <div className="space-y-8 md:space-y-10" ref={containerRef}>
-            <div className="flex items-center justify-between gap-4">
-                <p className="text-sm text-gray-600">
-                    {t.productCount}
-                </p>
-                <SortDropdown/>
-            </div>
-
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6" ref={gridRef}>
                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any*/}
                 {items.map((product: any, i: number) => (
