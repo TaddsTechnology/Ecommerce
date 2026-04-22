@@ -14,10 +14,8 @@ import { SearchProductsQuery } from "@/lib/vendure/queries";
 import {useTranslations} from 'next-intl';
 
 interface FacetFiltersProps {
-    productDataPromise: Promise<{
-        data: ResultOf<typeof SearchProductsQuery>;
-        token?: string;
-    }>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    searchResult: any;
 }
 
 function FilterContent({
@@ -84,10 +82,8 @@ function FilterContent({
     );
 }
 
-export function FacetFilters({ productDataPromise }: FacetFiltersProps) {
+export function FacetFilters({ searchResult }: FacetFiltersProps) {
     const t = useTranslations('Filters');
-    const result = use(productDataPromise);
-    const searchResult = result.data.search;
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const router = useRouter();
@@ -100,7 +96,8 @@ export function FacetFilters({ productDataPromise }: FacetFiltersProps) {
         values: Array<{ id: string; name: string; count: number }>;
     }
 
-    const facetGroups = searchResult.facetValues.reduce((acc: Record<string, FacetGroup>, item) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const facetGroups = (searchResult?.facetValues || []).reduce((acc: Record<string, FacetGroup>, item: any) => {
         const facetName = item.facetValue.facet.name;
         if (!acc[facetName]) {
             acc[facetName] = {

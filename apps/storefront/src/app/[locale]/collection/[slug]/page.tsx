@@ -115,12 +115,13 @@ export default async function CollectionPage({params, searchParams}: PageProps<'
     const t = await getTranslations({locale, namespace: 'Product'});
     const page = getCurrentPage(searchParamsResolved);
 
-    const productDataPromise = getCollectionProducts(slug, searchParamsResolved, currencyCode);
+    const productData = await getCollectionProducts(slug, searchParamsResolved, currencyCode);
+    const totalItems = productData.search.totalItems;
     const collectionResult = await getCollectionMetadata(slug);
     const collectionName = collectionResult.data.collection?.name ?? slug;
 
     const translations = {
-        productCount: (opts: {count: number}) => t('productCount', opts),
+        productCount: t('productCount', { count: totalItems }),
         noProductsFound: t('noProductsFound'),
     };
 
@@ -148,14 +149,14 @@ export default async function CollectionPage({params, searchParams}: PageProps<'
                 {/* Filters Sidebar */}
                 <aside className="lg:col-span-1">
                     <Suspense fallback={<div className="h-64 animate-pulse bg-muted rounded-lg" />}>
-                        <FacetFilters productDataPromise={productDataPromise} />
+                        <FacetFilters searchResult={productData.data.search} />
                     </Suspense>
                 </aside>
 
                 {/* Product Grid */}
                 <div className="lg:col-span-3">
                     <Suspense fallback={<ProductGridSkeleton />}>
-                        <ProductGrid productDataPromise={productDataPromise} currentPage={page} take={12} t={translations} />
+                        <ProductGrid searchResult={productData.data.search} currentPage={page} take={12} totalItems={totalItems} t={translations} />
                     </Suspense>
                 </div>
             </div>
