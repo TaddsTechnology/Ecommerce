@@ -20,19 +20,21 @@ export default async function ProfilePage() {
     const t = await getTranslations({locale, namespace: 'Account'});
 
     return (
-        <div className="space-y-6">
-            <div>
-                <h1 className="text-3xl font-bold">{t('profile')}</h1>
-                <p className="text-muted-foreground mt-2">
-                    {t('manageAccountInfo')}
-                </p>
+        <main className="min-h-screen">
+            <div className="container mx-auto px-4 py-8 md:py-12">
+                <div>
+                    <h1 className="text-3xl font-bold">{t('profile')}</h1>
+                    <p className="text-gray-500 mt-2">
+                        {t('manageAccountInfo')}
+                    </p>
+                </div>
+
+                <div className="mt-8 space-y-6">
+                    <EditProfileForm customer={customer} />
+                    <EditEmailForm currentEmail={customer?.emailAddress || ''} />
+                    <ChangePasswordForm />
+                </div>
             </div>
-
-            <EditProfileForm customer={customer} />
-
-            <EditEmailForm currentEmail={customer?.emailAddress || ''} />
-
-            <ChangePasswordForm />
-        </div>
+        </main>
     );
 }

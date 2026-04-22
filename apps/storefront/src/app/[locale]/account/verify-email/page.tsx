@@ -2,7 +2,6 @@ import { Suspense } from 'react';
 import { mutate } from '@/lib/vendure/api';
 import { UpdateCustomerEmailAddressMutation } from '@/lib/vendure/mutations';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Link } from '@/i18n/navigation';
 import {getRouteLocale} from '@/i18n/server';
 import {getTranslations} from 'next-intl/server';
@@ -27,7 +26,7 @@ async function VerifyEmailContent({searchParams}: {searchParams: Promise<Record<
                     <p className="text-sm text-muted-foreground mb-4">
                         {t('verifyEmail.checkEmail')}
                     </p>
-                    <Button render={<Link href="/account/profile" />} nativeButton={false}>{t('verifyEmail.goToProfile')}</Button>
+                    <Link href="/account/profile" className="inline-flex items-center justify-center rounded-[30px] bg-[var(--color-primary)] text-white h-12 px-6 font-medium">{t('verifyEmail.goToProfile')}</Link>
                 </CardContent>
             </Card>
         );
@@ -50,7 +49,7 @@ async function VerifyEmailContent({searchParams}: {searchParams: Promise<Record<
                         <p className="text-sm text-muted-foreground mb-4">
                             {t('verifyEmail.successMessage')}
                         </p>
-                        <Button render={<Link href="/account/profile" />} nativeButton={false}>{t('verifyEmail.goToProfile')}</Button>
+                        <Link href="/account/profile" className="inline-flex items-center justify-center rounded-[30px] bg-[var(--color-primary)] text-white h-12 px-6 font-medium">{t('verifyEmail.goToProfile')}</Link>
                     </CardContent>
                 </Card>
             );
@@ -68,7 +67,7 @@ async function VerifyEmailContent({searchParams}: {searchParams: Promise<Record<
                     <p className="text-sm text-muted-foreground mb-4">
                         {t('verifyEmail.failedMessage')}
                     </p>
-                    <Button render={<Link href="/account/profile" />} nativeButton={false}>{t('verifyEmail.goToProfile')}</Button>
+                    <Link href="/account/profile" className="inline-flex items-center justify-center rounded-[30px] bg-[var(--color-primary)] text-white h-12 px-6 font-medium">{t('verifyEmail.goToProfile')}</Link>
                 </CardContent>
             </Card>
         );
@@ -85,7 +84,7 @@ async function VerifyEmailContent({searchParams}: {searchParams: Promise<Record<
                     <p className="text-sm text-muted-foreground mb-4">
                         {t('verifyEmail.errorMessage')}
                     </p>
-                    <Button render={<Link href="/account/profile" />} nativeButton={false}>{t('verifyEmail.goToProfile')}</Button>
+                    <Link href="/account/profile" className="inline-flex items-center justify-center rounded-[30px] bg-[var(--color-primary)] text-white h-12 px-6 font-medium">{t('verifyEmail.goToProfile')}</Link>
                 </CardContent>
             </Card>
         );

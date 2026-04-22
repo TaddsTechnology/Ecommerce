@@ -9,13 +9,14 @@ export const metadata: Metadata = {
 
 const navItems = [
     {href: '/account/orders', labelKey: 'orders', icon: 'Package'},
-    {href: '/account/addresses', labelKey: 'addresses', icon: 'MapPin'},
+    {href: '/account/wishlist', labelKey: 'myWishlist', icon: 'Heart'},
     {href: '/account/profile', labelKey: 'profile', icon: 'User'},
+    {href: '/account/addresses', labelKey: 'addresses', icon: 'MapPin'},
 ];
 
 export default async function AccountLayout({children}: LayoutProps<'/[locale]/account'>) {
     return (
-        <div className="container mx-auto px-4 py-30">
+        <div className="container mx-auto px-4 py-8 md:py-12">
             {/* Mobile: horizontal tab bar */}
             <div className="md:hidden mb-6">
                 <Suspense>

@@ -2,7 +2,6 @@
 
 import {use} from 'react';
 import {ChevronLeft} from 'lucide-react';
-import {Button} from '@/components/ui/button';
 import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
 import {Separator} from '@/components/ui/separator';
 import {Badge} from '@/components/ui/badge';
@@ -38,10 +37,10 @@ export function OrderDetail({orderPromise}: OrderDetailProps) {
     return (
         <div>
             <div className="mb-6">
-                <Button render={<Link href="/account/orders" />} nativeButton={false} variant="ghost" size="sm" className="mb-4">
-                        <ChevronLeft className="h-4 w-4 mr-2"/>
-                        {t('backToOrders')}
-                </Button>
+                <Link href="/account/orders" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-4">
+                    <ChevronLeft className="h-4 w-4"/>
+                    {t('backToOrders')}
+                </Link>
                 <div className="flex items-center justify-between">
                     <div>
                         <h1 className="text-3xl font-bold">{t('order', {code: order.code})}</h1>
