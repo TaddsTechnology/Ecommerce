@@ -453,3 +453,19 @@ export const SetCustomerForOrderMutation = graphql(`
         }
     }
 `);
+
+export const UpdateWishlistMutation = graphql(`
+    mutation UpdateWishlist($items: JSON!) {
+        updateCustomer(input: { customFields: { wishlistItems: $items } }) {
+            __typename
+            ... on Customer {
+                id
+                wishlistItems
+            }
+            ... on ErrorResult {
+                errorCode
+                message
+            }
+        }
+    }
+`);
