@@ -1,5 +1,4 @@
 import { Link } from '@/i18n/navigation';
-import {Button} from '@/components/ui/button';
 import {Lock} from 'lucide-react';
 import {Price} from '@/components/commerce/price';
 import {getTranslations} from 'next-intl/server';
@@ -60,14 +59,14 @@ export async function OrderSummary({activeOrder}: { activeOrder: ActiveOrder }) 
                 </div>
             </div>
 
-            <Button render={<Link href="/checkout" />} nativeButton={false} className="w-full" size="lg">{t('proceedToCheckout')}</Button>
+            <Link href="/checkout" className="inline-flex items-center justify-center rounded-[30px] bg-[var(--color-primary)] text-white h-14 px-6 font-medium w-full">{t('proceedToCheckout')}</Link>
 
             <div className="flex items-center justify-center gap-1.5 mt-3 text-xs text-muted-foreground">
                 <Lock className="h-3 w-3" />
                 <span>{t('secureCheckout')}</span>
             </div>
 
-            <Button render={<Link href="/" />} nativeButton={false} variant="outline" className="w-full mt-3">{t('continueShopping')}</Button>
+            <Link href="/" className="inline-flex items-center justify-center rounded-[30px] border border-[var(--color-border)] h-12 px-6 font-medium w-full mt-3">{t('continueShopping')}</Link>
         </div>
     );
 }
