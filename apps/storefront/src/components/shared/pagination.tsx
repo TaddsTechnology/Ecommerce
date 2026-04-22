@@ -1,16 +1,16 @@
 'use client';
 
-import {useSearchParams} from 'next/navigation';
-import {usePathname, Link} from '@/i18n/navigation';
-import {ChevronLeft, ChevronRight} from 'lucide-react';
-import {Button} from '@/components/ui/button';
+import { useSearchParams } from 'next/navigation';
+import { usePathname } from '@/i18n/navigation';
+import Link from 'next/link';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface PaginationProps {
     currentPage: number;
     totalPages: number;
 }
 
-export function Pagination({currentPage, totalPages}: PaginationProps) {
+export function Pagination({ currentPage, totalPages }: PaginationProps) {
     const pathname = usePathname();
     const searchParams = useSearchParams();
 
@@ -26,11 +26,7 @@ export function Pagination({currentPage, totalPages}: PaginationProps) {
         const rangeWithDots = [];
 
         for (let i = 1; i <= totalPages; i++) {
-            if (
-                i === 1 ||
-                i === totalPages ||
-                (i >= currentPage - delta && i <= currentPage + delta)
-            ) {
+            if (i === 1 || i === totalPages || (i >= currentPage - delta && i <= currentPage + delta)) {
                 range.push(i);
             }
         }
@@ -51,54 +47,38 @@ export function Pagination({currentPage, totalPages}: PaginationProps) {
 
     return (
         <nav className="flex items-center justify-center gap-2">
-            <Button
-                variant="outline"
-                size="icon"
-                className="rounded-full"
-                render={currentPage !== 1 ? <Link href={createPageUrl(currentPage - 1)} /> : undefined}
-                nativeButton={currentPage !== 1 ? false : undefined}
-                disabled={currentPage === 1}
+            <Link
+                href={createPageUrl(currentPage - 1)}
+                className={`flex items-center justify-center w-10 h-10 rounded-full border ${currentPage === 1 ? 'opacity-50 pointer-events-none' : 'hover:bg-[var(--color-grey-100)]'}`}
             >
-                <ChevronLeft className="h-4 w-4"/>
-            </Button>
+                <ChevronLeft className="h-4 w-4" />
+            </Link>
 
             {pages.map((page, index) => {
                 if (page === '...') {
-                    return (
-                        <span key={`dots-${index}`} className="px-2 text-muted-foreground">
-                            ...
-                        </span>
-                    );
+                    return <span key={`dots-${index}`} className="px-2 text-muted-foreground">...</span>;
                 }
 
                 const pageNum = page as number;
                 const isActive = pageNum === currentPage;
 
                 return (
-                    <Button
+                    <Link
                         key={pageNum}
-                        variant={isActive ? 'default' : 'outline'}
-                        size="icon"
-                        className="rounded-full"
-                        render={!isActive ? <Link href={createPageUrl(pageNum)} /> : undefined}
-                        nativeButton={!isActive ? false : undefined}
-                        disabled={isActive}
+                        href={createPageUrl(pageNum)}
+                        className={`flex items-center justify-center w-10 h-10 rounded-full text-sm font-medium transition-colors ${isActive ? 'bg-[var(--color-primary)] text-white' : 'hover:bg-[var(--color-grey-100)]'}`}
                     >
                         {pageNum}
-                    </Button>
+                    </Link>
                 );
             })}
 
-            <Button
-                variant="outline"
-                size="icon"
-                className="rounded-full"
-                render={currentPage !== totalPages ? <Link href={createPageUrl(currentPage + 1)} /> : undefined}
-                nativeButton={currentPage !== totalPages ? false : undefined}
-                disabled={currentPage === totalPages}
+            <Link
+                href={createPageUrl(currentPage + 1)}
+                className={`flex items-center justify-center w-10 h-10 rounded-full border ${currentPage === totalPages ? 'opacity-50 pointer-events-none' : 'hover:bg-[var(--color-grey-100)]'}`}
             >
-                <ChevronRight className="h-4 w-4"/>
-            </Button>
+                <ChevronRight className="h-4 w-4" />
+            </Link>
         </nav>
     );
 }

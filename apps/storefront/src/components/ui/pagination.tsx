@@ -45,19 +45,17 @@ function PaginationLink({
   ...props
 }: PaginationLinkProps) {
   return (
-    <Button
-      variant={isActive ? "outline" : "ghost"}
-      size={size}
-      className={cn(className)}
-      nativeButton={false}
-      render={
-        <a
-          aria-current={isActive ? "page" : undefined}
-          data-slot="pagination-link"
-          data-active={isActive}
-          {...props}
-        />
-      }
+    <a
+      aria-current={isActive ? "page" : undefined}
+      data-slot="pagination-link"
+      data-active={isActive}
+      className={cn(
+        "inline-flex items-center justify-center rounded-[30px] text-sm font-medium transition-colors",
+        isActive ? "border border-[var(--color-border)] bg-transparent" : "hover:bg-[var(--color-grey-100)]",
+        size === "icon" ? "h-10 w-10" : "h-9 px-3",
+        className
+      )}
+      {...props}
     />
   )
 }
