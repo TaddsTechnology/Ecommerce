@@ -119,6 +119,11 @@ export default async function CollectionPage({params, searchParams}: PageProps<'
     const collectionResult = await getCollectionMetadata(slug);
     const collectionName = collectionResult.data.collection?.name ?? slug;
 
+    const translations = {
+        productCount: (opts: {count: number}) => t('productCount', opts),
+        noProductsFound: t('noProductsFound'),
+    };
+
     return (
         <div className="container mx-auto px-4 py-8 mt-16">
             {/* Breadcrumbs */}
@@ -150,7 +155,7 @@ export default async function CollectionPage({params, searchParams}: PageProps<'
                 {/* Product Grid */}
                 <div className="lg:col-span-3">
                     <Suspense fallback={<ProductGridSkeleton />}>
-                        <ProductGrid productDataPromise={productDataPromise} currentPage={page} take={12} />
+                        <ProductGrid productDataPromise={productDataPromise} currentPage={page} take={12} t={translations} />
                     </Suspense>
                 </div>
             </div>
