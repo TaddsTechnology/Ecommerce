@@ -2,8 +2,6 @@
 
 import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
 import { requestPasswordResetAction } from './actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -19,13 +17,9 @@ import {
 import { Link } from '@/i18n/navigation';
 import {useTranslations} from 'next-intl';
 
-function createForgotPasswordSchema(t: ReturnType<typeof useTranslations<'Auth'>>) {
-    return z.object({
-        emailAddress: z.email(t('emailValidation')),
-    });
-}
-
-type ForgotPasswordFormData = z.infer<ReturnType<typeof createForgotPasswordSchema>>;
+type ForgotPasswordFormData = {
+    emailAddress: string;
+};
 
 export function ForgotPasswordForm() {
     const t = useTranslations('Auth');
@@ -33,9 +27,7 @@ export function ForgotPasswordForm() {
     const [serverError, setServerError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
 
-    const forgotPasswordSchema = createForgotPasswordSchema(t);
     const form = useForm<ForgotPasswordFormData>({
-        resolver: zodResolver(forgotPasswordSchema),
         defaultValues: {
             emailAddress: '',
         },

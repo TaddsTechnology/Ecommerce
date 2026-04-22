@@ -1,4 +1,3 @@
-import {Button} from '@/components/ui/button';
 import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
 import {Check, ShoppingBag, ClipboardList} from 'lucide-react';
 import { Link } from '@/i18n/navigation';
@@ -152,14 +151,14 @@ export async function OrderConfirmation({paramsPromise}: OrderConfirmationProps)
                 )}
 
                 <div className="flex flex-col sm:flex-row gap-3">
-                    <Button nativeButton={false} render={<Link href="/" />} className="flex-1" size="lg">
-                        <ShoppingBag className="mr-2 h-4 w-4" />
+                    <Link href="/" className="inline-flex items-center justify-center gap-2 rounded-[30px] bg-[var(--color-primary)] text-white h-14 px-8 font-medium flex-1">
+                        <ShoppingBag className="h-4 w-4" />
                         {t('continueShopping')}
-                    </Button>
-                    <Button nativeButton={false} render={<Link href="/account/orders" />} variant="outline" className="flex-1" size="lg">
-                        <ClipboardList className="mr-2 h-4 w-4" />
+                    </Link>
+                    <Link href="/account/orders" className="inline-flex items-center justify-center gap-2 rounded-[30px] border border-[var(--color-border)] h-14 px-8 font-medium flex-1">
+                        <ClipboardList className="h-4 w-4" />
                         {t('viewOrders')}
-                    </Button>
+                    </Link>
                 </div>
             </div>
         </div>

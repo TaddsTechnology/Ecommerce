@@ -1,5 +1,4 @@
 import { getRouteLocale } from '@/i18n/server';
-import { Button } from '@/components/ui/button';
 import { SearchX, Home, ShoppingBag } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
 import { getTranslations } from 'next-intl/server';
@@ -33,14 +32,14 @@ export default async function NotFound() {
                 </div>
 
                 <div className="flex gap-3 justify-center">
-                    <Button nativeButton={false} render={<Link href="/" />} size="lg">
-                        <Home className="mr-2 h-4 w-4" />
+                    <Link href="/" className="inline-flex items-center justify-center gap-2 rounded-[30px] bg-[var(--color-primary)] text-white h-14 px-8 font-medium">
+                        <Home className="h-4 w-4" />
                         {t('goHome')}
-                    </Button>
-                    <Button nativeButton={false} render={<Link href="/search" />} variant="outline" size="lg">
-                        <ShoppingBag className="mr-2 h-4 w-4" />
+                    </Link>
+                    <Link href="/search" className="inline-flex items-center justify-center gap-2 rounded-[30px] border border-[var(--color-border)] h-14 px-8 font-medium">
+                        <ShoppingBag className="h-4 w-4" />
                         {t('browseProducts')}
-                    </Button>
+                    </Link>
                 </div>
 
                 {collections.length > 0 && (
@@ -48,15 +47,13 @@ export default async function NotFound() {
                         <p className="text-sm font-medium text-muted-foreground mb-3">{t('popularCollections')}</p>
                         <div className="flex flex-wrap gap-2 justify-center">
                             {collections.slice(0, 6).map((collection) => (
-                                <Button
+                                <Link
                                     key={collection.id}
-                                    render={<Link href={`/collection/${collection.slug}`} />}
-                                    variant="outline"
-                                    size="sm"
-                                    className="rounded-full"
+                                    href={`/collection/${collection.slug}`}
+                                    className="inline-flex items-center justify-center rounded-full border border-[var(--color-border)] h-9 px-3 text-sm font-medium"
                                 >
                                     {collection.name}
-                                </Button>
+                                </Link>
                             ))}
                         </div>
                     </div>
