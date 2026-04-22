@@ -464,5 +464,23 @@
     "failedPasswordReset": "Passwort-Zurücksetzung konnte nicht angefordert werden",
     "verificationTokenRequired": "Bestätigungs-Token ist erforderlich",
     "failedAddToCart": "Artikel konnte nicht zum Warenkorb hinzugefügt werden"
+  },
+  "Contact": {
+    "pageTitle": "Kontakt",
+    "pageDescription": "Setzen Sie sich mit unserem Team in Verbindung. Wir helfen Ihnen gerne bei allen Fragen.",
+    "sendMessage": "Nachricht senden",
+    "contactInfo": "Kontaktdaten",
+    "email": "E-Mail",
+    "phone": "Telefon",
+    "address": "Adresse",
+    "hours": "Geschäftszeiten",
+    "monday": "Montag",
+    "tuesday": "Dienstag",
+    "wednesday": "Mittwoch",
+    "thursday": "Donnerstag",
+    "friday": "Freitag",
+    "saturday": "Samstag",
+    "sunday": "Sonntag",
+    "closed": "Geschlossen"
   }
 }

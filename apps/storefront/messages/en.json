@@ -470,5 +470,23 @@
     "failedPasswordReset": "Failed to request password reset",
     "verificationTokenRequired": "Verification token is required",
     "failedAddToCart": "Failed to add item to cart"
+  },
+  "Contact": {
+    "pageTitle": "Contact Us",
+    "pageDescription": "Get in touch with our team. We're here to help with any questions you may have.",
+    "sendMessage": "Send Us a Message",
+    "contactInfo": "Contact Information",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "hours": "Business Hours",
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday",
+    "closed": "Closed"
   }
 }
