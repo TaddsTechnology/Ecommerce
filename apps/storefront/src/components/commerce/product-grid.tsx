@@ -1,48 +1,75 @@
-import {ResultOf} from '@/graphql';
+'use client';
+
+import {useRef} from 'react';
 import {ProductCard} from './product-card';
 import {Pagination} from '@/components/shared/pagination';
 import {SortDropdown} from './sort-dropdown';
-import {SearchProductsQuery} from "@/lib/vendure/queries";
-import {getRouteLocale} from '@/i18n/server';
-import {getTranslations} from 'next-intl/server';
+import {useGSAP} from '@gsap/react';
+import gsap from 'gsap';
 
 interface ProductGridProps {
-    productDataPromise: Promise<{
-        data: ResultOf<typeof SearchProductsQuery>;
-        token?: string;
-    }>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    searchResult: any;
     currentPage: number;
     take: number;
+    totalItems: number;
+    t: {
+        productCount: string;
+        noProductsFound: string;
+    };
 }
 
-export async function ProductGrid({productDataPromise, currentPage, take}: ProductGridProps) {
-    const locale = await getRouteLocale();
-    const t = await getTranslations({locale, namespace: 'Product'});
-    const result = await productDataPromise;
+export function ProductGrid({searchResult, currentPage, take, totalItems, t}: ProductGridProps) {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const gridRef = useRef<HTMLDivElement>(null);
+    const totalPages = Math.ceil(totalItems / take);
 
-    const searchResult = result.data.search;
-    const totalPages = Math.ceil(searchResult.totalItems / take);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const items = searchResult?.items as any[];
 
-    if (!searchResult.items.length) {
+    useGSAP(() => {
+        if (containerRef.current) {
+            gsap.fromTo(containerRef.current,
+                { opacity: 0, y: 20 },
+                { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }
+            );
+        }
+        
+        if (gridRef.current?.children) {
+            gsap.fromTo(gridRef.current.children,
+                { opacity: 0, y: 20 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.4,
+                    stagger: 0.08,
+                    ease: 'power3.out'
+                }
+            );
+        }
+    }, { scope: containerRef });
+
+    if (!items || items.length === 0) {
         return (
             <div className="text-center py-12">
-                <p className="text-muted-foreground">{t('noProductsFound')}</p>
+                <p className="text-gray-500">{t.noProductsFound}</p>
             </div>
         );
     }
 
     return (
-        <div className="space-y-8">
-            <div className="flex items-center justify-between">
-                <p className="text-sm text-muted-foreground">
-                    {t('productCount', {count: searchResult.totalItems})}
+        <div className="space-y-8 md:space-y-10" ref={containerRef}>
+            <div className="flex items-center justify-between gap-4">
+                <p className="text-sm text-gray-600">
+                    {t.productCount}
                 </p>
                 <SortDropdown/>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {searchResult.items.map((product, i) => (
-                    <ProductCard key={'product-grid-item' + i} product={product}/>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6" ref={gridRef}>
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any*/}
+                {items.map((product: any, i: number) => (
+                    <ProductCard key={'product-grid-item-' + i} product={product}/>
                 ))}
             </div>
 

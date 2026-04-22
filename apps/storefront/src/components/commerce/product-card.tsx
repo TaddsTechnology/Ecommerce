@@ -2,7 +2,6 @@ import Image from 'next/image';
 import {FragmentOf, readFragment} from '@/graphql';
 import {ProductCardFragment} from '@/lib/vendure/fragments';
 import {Price} from '@/components/commerce/price';
-import {Suspense} from "react";
 import { Link } from '@/i18n/navigation';
 import {useTranslations} from 'next-intl';
 
@@ -17,15 +16,15 @@ export function ProductCard({product: productProp}: ProductCardProps) {
     return (
         <Link
             href={`/product/${product.slug}`}
-            className="group block bg-card rounded-xl overflow-hidden border border-border hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+            className="group block transition-all duration-300"
         >
-            <div className="aspect-square relative bg-muted overflow-hidden">
+            <div className="relative aspect-[4/5] bg-gray-50 overflow-hidden">
                 {product.productAsset ? (
                     <Image
                         src={product.productAsset.preview}
                         alt={product.productName}
                         fill
-                        className="object-cover group-hover:scale-105 group-hover:opacity-90 transition-all duration-500"
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     />
                 ) : (
@@ -34,26 +33,24 @@ export function ProductCard({product: productProp}: ProductCardProps) {
                     </div>
                 )}
             </div>
-            <div className="p-4 space-y-2">
-                <h3 className="font-medium leading-snug line-clamp-2 group-hover:text-primary transition-colors">
+            <div className="py-3">
+                <h3 className="text-sm font-medium leading-tight text-gray-900 line-clamp-2 group-hover:text-gray-600 transition-colors">
                     {product.productName}
                 </h3>
-                <Suspense fallback={<div className="h-8 w-36 rounded bg-muted"></div>}>
-                    <p className="text-lg font-bold tracking-tight">
-                        {product.priceWithTax.__typename === 'PriceRange' ? (
-                            product.priceWithTax.min !== product.priceWithTax.max ? (
-                                <>
-                                    <span className="text-xs font-normal text-muted-foreground mr-1">{t('from')}</span>
-                                    <Price value={product.priceWithTax.min} currencyCode={product.currencyCode}/>
-                                </>
-                            ) : (
+                <p className="text-sm font-medium mt-1 text-gray-900">
+                    {product.priceWithTax.__typename === 'PriceRange' ? (
+                        product.priceWithTax.min !== product.priceWithTax.max ? (
+                            <>
+                                <span className="text-sm font-normal text-gray-500 mr-1">{t('from')}</span>
                                 <Price value={product.priceWithTax.min} currencyCode={product.currencyCode}/>
-                            )
-                        ) : product.priceWithTax.__typename === 'SinglePrice' ? (
-                            <Price value={product.priceWithTax.value} currencyCode={product.currencyCode}/>
-                        ) : null}
-                    </p>
-                </Suspense>
+                            </>
+                        ) : (
+                            <Price value={product.priceWithTax.min} currencyCode={product.currencyCode}/>
+                        )
+                    ) : product.priceWithTax.__typename === 'SinglePrice' ? (
+                        <Price value={product.priceWithTax.value} currencyCode={product.currencyCode}/>
+                    ) : null}
+                </p>
             </div>
         </Link>
     );
