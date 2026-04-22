@@ -114,9 +114,9 @@ export default async function ProductDetailPage({params, searchParams}: PageProp
 
     return (
         <>
-            <div className="container mx-auto px-4 py-8 mt-16">
+            <div className="container mx-auto px-4 py-6 sm:py-8">
                 {/* Breadcrumb Navigation */}
-                <Breadcrumb className="mb-6">
+                <Breadcrumb className="mb-4 sm:mb-6">
                     <BreadcrumbList>
                         <BreadcrumbItem>
                             <BreadcrumbLink render={<Link href="/" />}>{t('home')}</BreadcrumbLink>
@@ -138,7 +138,7 @@ export default async function ProductDetailPage({params, searchParams}: PageProp
                     </BreadcrumbList>
                 </Breadcrumb>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-10 lg:gap-14">
                     {/* Left Column: Image Carousel */}
                     <div className="lg:sticky lg:top-20 lg:self-start">
                         <ProductImageCarousel images={product.assets} />

@@ -1,23 +1,28 @@
 'use client';
 
-import {useState, useMemo, useTransition} from 'react';
+import {useState, useMemo, useTransition, useRef} from 'react';
 import {useSearchParams} from 'next/navigation';
 import {usePathname, useRouter} from '@/i18n/navigation';
+import {useGSAP} from '@gsap/react';
+import gsap from 'gsap';
 import {Button} from '@/components/ui/button';
 import {Label} from '@/components/ui/label';
 import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
-import {Separator} from '@/components/ui/separator';
-import {ShoppingCart, CheckCircle2} from 'lucide-react';
+import {ShoppingCart, CheckCircle2, Heart, Truck, RotateCcw, ShieldCheck, Clock} from 'lucide-react';
 import {addToCart} from '@/app/[locale]/product/[slug]/actions';
 import {toast} from 'sonner';
 import {Price} from '@/components/commerce/price';
 import {useTranslations} from 'next-intl';
+import {useWishlistStore} from '@/hooks/use-wishlist';
 
 interface ProductInfoProps {
     product: {
         id: string;
         name: string;
+        slug: string;
         description: string;
+        assets?: Array<{ preview: string }>;
+        collections?: Array<{ name: string }>;
         variants: Array<{
             id: string;
             name: string;
@@ -58,6 +63,76 @@ export function ProductInfo({product, searchParams, currencyCode}: ProductInfoPr
     const currentSearchParams = useSearchParams();
     const [isPending, startTransition] = useTransition();
     const [isAdded, setIsAdded] = useState(false);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const titleRef = useRef<HTMLHeadingElement>(null);
+    const priceRef = useRef<HTMLDivElement>(null);
+    const descRef = useRef<HTMLDivElement>(null);
+    const optionsRef = useRef<HTMLDivElement>(null);
+    const buttonRef = useRef<HTMLDivElement>(null);
+    const {addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist} = useWishlistStore();
+
+    const isWishlisted = isInWishlist(product.id);
+
+    const handleWishlistToggle = () => {
+        if (isWishlisted) {
+            removeFromWishlist(product.id);
+            toast.success(t('removedFromWishlist'));
+        } else {
+            const primaryCollection = product.collections?.[0];
+            addToWishlist({
+                id: product.id,
+                name: product.name,
+                price: selectedVariant?.priceWithTax || 0,
+                image: (product as { assets?: Array<{ preview: string }> }).assets?.[0]?.preview || '',
+                slug: product.slug,
+                category: (product as { collections?: Array<{ name: string }> }).collections?.[0]?.name,
+            });
+            toast.success(t('addedToWishlist'));
+        }
+    };
+
+    useGSAP(() => {
+        const tl = gsap.timeline();
+        
+        if (titleRef.current) {
+            tl.fromTo(titleRef.current,
+                { opacity: 0, y: 20 },
+                { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }
+            );
+        }
+        
+        if (priceRef.current) {
+            tl.fromTo(priceRef.current,
+                { opacity: 0, y: 15 },
+                { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' },
+                '-=0.2'
+            );
+        }
+        
+        if (descRef.current) {
+            tl.fromTo(descRef.current,
+                { opacity: 0, y: 15 },
+                { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' },
+                '-=0.2'
+            );
+        }
+        
+        if (optionsRef.current?.children) {
+            tl.fromTo(optionsRef.current.children,
+                { opacity: 0, y: 10 },
+                { opacity: 1, y: 0, duration: 0.3, stagger: 0.1, ease: 'power3.out' },
+                '-=0.2'
+            );
+        }
+        
+        if (buttonRef.current) {
+            tl.fromTo(buttonRef.current,
+                { opacity: 0, y: 10 },
+                { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' },
+                '-=0.2'
+            );
+        }
+    }, { scope: containerRef });
 
     // Initialize selected options from URL
     const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>(() => {
@@ -141,56 +216,74 @@ export function ProductInfo({product, searchParams, currencyCode}: ProductInfoPr
     const canAddToCart = selectedVariant && isInStock;
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-8" ref={containerRef}>
             {/* Product Title & Price */}
-            <div className="space-y-2">
-                <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{product.name}</h1>
+            <div>
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight leading-tight" ref={titleRef}>
+                    {product.name}
+                </h1>
                 {selectedVariant && (
-                    <p className="text-2xl md:text-3xl text-muted-foreground font-semibold mt-3">
+                    <p className="text-2xl sm:text-3xl font-bold mt-3 text-gray-900" ref={priceRef}>
                         <Price value={selectedVariant.priceWithTax} currencyCode={currencyCode}/>
                     </p>
                 )}
             </div>
 
-            <Separator />
-
-            {/* Product Description */}
-            <div className="prose prose-sm max-w-none text-muted-foreground">
+            {/* Product Description - 2025 modern typography */}
+            <div className="text-base sm:text-lg leading-relaxed text-gray-600 max-w-2xl" ref={descRef}>
                 <div dangerouslySetInnerHTML={{__html: product.description}}/>
             </div>
 
             {/* Option Groups */}
             {product.optionGroups.length > 0 && (
-                <div className="space-y-5">
-                    {product.optionGroups.map((group) => (
-                        <div key={group.id} className="space-y-3">
-                            <Label className="text-base font-semibold">
-                                {group.name}
-                            </Label>
-                            <RadioGroup
-                                value={selectedOptions[group.id] || ''}
-                                onValueChange={(value) => handleOptionChange(group.id, value)}
-                            >
-                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                                    {group.options.map((option) => (
-                                        <div key={option.id}>
-                                            <RadioGroupItem
-                                                value={option.id}
-                                                id={option.id}
-                                                className="peer sr-only"
-                                            />
-                                            <Label
-                                                htmlFor={option.id}
-                                                className="flex items-center justify-center rounded-lg border-2 border-muted bg-popover px-4 py-3 text-sm font-medium hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:ring-2 peer-data-[state=checked]:ring-primary/20 peer-data-[state=checked]:bg-primary/5 cursor-pointer transition-all"
-                                            >
-                                                {option.name}
-                                            </Label>
-                                        </div>
-                                    ))}
+                <div className="space-y-5" ref={optionsRef}>
+                    {product.optionGroups.map((group) => {
+                        const selectedOptionId = selectedOptions[group.id];
+                        const selectedOption = group.options.find(o => o.id === selectedOptionId);
+                        return (
+                            <div key={group.id} className="space-y-3">
+                                <div className="flex items-center gap-2">
+                                    <Label className="text-base font-semibold">
+                                        {group.name}
+                                    </Label>
+                                    {selectedOption && (
+                                        <span className="text-sm text-gray-500">
+                                            • <span className="font-medium text-gray-900">{selectedOption.name}</span>
+                                        </span>
+                                    )}
                                 </div>
-                            </RadioGroup>
-                        </div>
-                    ))}
+                                <RadioGroup
+                                    value={selectedOptions[group.id] || ''}
+                                    onValueChange={(value) => handleOptionChange(group.id, value)}
+                                >
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                        {group.options.map((option) => {
+                                            const isSelected = selectedOptions[group.id] === option.id;
+                                            return (
+                                                <div key={option.id}>
+                                                    <RadioGroupItem
+                                                        value={option.id}
+                                                        id={option.id}
+                                                        className="peer sr-only"
+                                                    />
+                                                    <Label
+                                                        htmlFor={option.id}
+                                                        className={`flex items-center justify-center rounded-lg border-2 px-4 py-3 text-sm font-medium cursor-pointer transition-all ${
+                                                            isSelected
+                                                                ? 'border-primary bg-primary text-primary-foreground ring-2 ring-primary/20'
+                                                                : 'border-muted bg-popover hover:bg-accent hover:text-accent-foreground'
+                                                        }`}
+                                                    >
+                                                        {option.name}
+                                                    </Label>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </RadioGroup>
+                            </div>
+                        );
+                    })}
                 </div>
             )}
 
@@ -211,11 +304,11 @@ export function ProductInfo({product, searchParams, currencyCode}: ProductInfoPr
                 </div>
             )}
 
-            {/* Add to Cart Button */}
-            <div className="pt-2 space-y-3">
+            {/* Add to Cart & Wishlist Buttons */}
+            <div className="pt-2 space-y-3" ref={buttonRef}>
                 <Button
                     size="lg"
-                    className="w-full h-12 text-base font-semibold rounded-lg"
+                    className="w-full h-14 text-base font-semibold rounded-[30px]"
                     disabled={!canAddToCart || isPending}
                     onClick={handleAddToCart}
                 >
@@ -237,6 +330,17 @@ export function ProductInfo({product, searchParams, currencyCode}: ProductInfoPr
                         </>
                     )}
                 </Button>
+                <Button
+                    variant="outline"
+                    size="lg"
+                    className={`w-full h-14 text-base font-semibold rounded-[30px] flex items-center justify-center gap-2 ${
+                        isWishlisted ? 'border-red-500 text-red-500 hover:border-red-500 hover:text-red-500' : ''
+                    }`}
+                    onClick={handleWishlistToggle}
+                >
+                    <Heart className={`w-5 h-5 ${isWishlisted ? 'fill-current' : ''}`} />
+                    {isWishlisted ? t('removeFromWishlist') : t('addToWishlist')}
+                </Button>
             </div>
 
             {/* SKU */}
@@ -245,6 +349,26 @@ export function ProductInfo({product, searchParams, currencyCode}: ProductInfoPr
                     {t('sku', {sku: selectedVariant.sku})}
                 </div>
             )}
+
+            {/* Trust Badges */}
+            <div className="border-t pt-6 space-y-4 text-sm text-muted-foreground">
+                <div className="flex items-center justify-between py-2 border-b">
+                    <span className="flex items-center gap-2"><Truck className="h-4 w-4 text-primary" /> Free Shipping</span>
+                    <span>On orders over $150</span>
+                </div>
+                <div className="flex items-center justify-between py-2 border-b">
+                    <span className="flex items-center gap-2"><RotateCcw className="h-4 w-4 text-primary" /> Easy Returns</span>
+                    <span>30 days return policy</span>
+                </div>
+                <div className="flex items-center justify-between py-2 border-b">
+                    <span className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-primary" /> Secure Checkout</span>
+                    <span>100% protected</span>
+                </div>
+                <div className="flex items-center justify-between py-2">
+                    <span className="flex items-center gap-2"><Clock className="h-4 w-4 text-primary" /> Quick Delivery</span>
+                    <span>2-4 business days</span>
+                </div>
+            </div>
         </div>
     );
 }

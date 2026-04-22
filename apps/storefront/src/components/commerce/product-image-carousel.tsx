@@ -1,7 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Image from 'next/image';
+import { useGSAP } from '@gsap/react';
+import gsap from 'gsap';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -15,6 +17,22 @@ interface ProductImageCarouselProps {
 
 export function ProductImageCarousel({ images }: ProductImageCarouselProps) {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const imageRef = useRef<HTMLDivElement>(null);
+
+    useGSAP(() => {
+        gsap.fromTo(containerRef.current, 
+            { opacity: 0, y: 20 },
+            { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }
+        );
+    }, { scope: containerRef });
+
+    useGSAP(() => {
+        gsap.fromTo(imageRef.current,
+            { opacity: 0, scale: 0.98 },
+            { opacity: 1, scale: 1, duration: 0.4, ease: 'power2.out' }
+        );
+    }, { scope: imageRef, dependencies: [currentIndex] });
 
     if (!images || images.length === 0) {
         return (
@@ -33,14 +51,14 @@ export function ProductImageCarousel({ images }: ProductImageCarouselProps) {
     };
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-4" ref={containerRef}>
             {/* Main Image */}
-            <div className="relative aspect-square bg-muted rounded-xl overflow-hidden group cursor-crosshair">
+            <div className="relative aspect-square bg-muted rounded-xl overflow-hidden group cursor-crosshair" ref={imageRef}>
                 <Image
                     src={images[currentIndex].source}
                     alt={`Product image ${currentIndex + 1}`}
                     fill
-                    className="object-cover hover:scale-105 transition-transform duration-500"
+                    className="object-cover"
                     sizes="(max-width: 1024px) 100vw, 50vw"
                     priority={currentIndex === 0}
                 />

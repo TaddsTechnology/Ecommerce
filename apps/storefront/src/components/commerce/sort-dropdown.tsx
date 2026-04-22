@@ -37,7 +37,7 @@ export function SortDropdown() {
 
     return (
         <Select value={currentSort} onValueChange={handleSortChange} items={sortOptions}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-[200px]">
                 <SelectValue placeholder={t('placeholder')}/>
             </SelectTrigger>
             <SelectContent>
