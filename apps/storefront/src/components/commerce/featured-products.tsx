@@ -6,18 +6,18 @@ import {query} from "@/lib/vendure/api";
 import {GetCollectionProductsQuery} from "@/lib/vendure/queries";
 import {getTranslations} from 'next-intl/server';
 
-async function getFeaturedCollectionProducts(currencyCode: string) {
+async function getCollectionProducts(slug: string, currencyCode: string) {
     'use cache'
     cacheLife('days')
 
     const locale = await getRouteLocale();
-    cacheTag(`featured-${locale}-${currencyCode}`);
+    cacheTag(`collection-${slug}-${locale}-${currencyCode}`);
     cacheTag('products');
 
     const result = await query(GetCollectionProductsQuery, {
-        slug: "electronics",
+        slug,
         input: {
-            collectionSlug: "electronics",
+            collectionSlug: slug,
             take: 12,
             skip: 0,
             groupByProduct: true
@@ -27,17 +27,25 @@ async function getFeaturedCollectionProducts(currencyCode: string) {
     return result.data.search.items;
 }
 
-
 export async function FeaturedProducts() {
     const locale = await getRouteLocale();
     const currencyCode = await getActiveCurrencyCode();
     const t = await getTranslations({locale, namespace: 'Product'});
-    const products = await getFeaturedCollectionProducts(currencyCode);
+
+    const [newArrivals, bestsellers, sale] = await Promise.all([
+        getCollectionProducts('new-arrivals', currencyCode),
+        getCollectionProducts('bestsellers', currencyCode),
+        getCollectionProducts('sale', currencyCode),
+    ]);
 
     return (
         <FeaturedProductsTabs
             title={t('featuredProducts')}
-            products={products}
+            productsData={{
+                new: newArrivals,
+                bestsellers: bestsellers,
+                sale: sale,
+            }}
         />
     );
 }

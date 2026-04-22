@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, Fragment } from 'react';
+import { useState } from 'react';
 import { ProductCard } from '@/components/commerce/product-card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { FragmentOf } from '@/graphql';
@@ -10,7 +10,11 @@ import { Link } from '@/i18n/navigation';
 
 interface ProductCarouselProps {
   title: string;
-  products: Array<FragmentOf<typeof ProductCardFragment>>;
+  productsData: {
+    new: Array<FragmentOf<typeof ProductCardFragment>>;
+    bestsellers: Array<FragmentOf<typeof ProductCardFragment>>;
+    sale: Array<FragmentOf<typeof ProductCardFragment>>;
+  };
 }
 
 interface Tab {
@@ -26,10 +30,21 @@ const tabs: Tab[] = [
   { id: 'sale', label: 'Sale', filter: 'sale', collection: 'sale' },
 ];
 
-export function FeaturedProductsTabs({ products, title }: ProductCarouselProps) {
+export function FeaturedProductsTabs({ productsData, title }: ProductCarouselProps) {
   const [activeTab, setActiveTab] = useState('new');
 
-  const filteredProducts = products.slice(0, 8);
+  const getProducts = () => {
+    switch (activeTab) {
+      case 'bestsellers':
+        return productsData.bestsellers;
+      case 'sale':
+        return productsData.sale;
+      default:
+        return productsData.new;
+    }
+  };
+
+  const filteredProducts = getProducts();
 
   return (
     <section className="py-16 md:py-20 bg-white">
@@ -63,7 +78,7 @@ export function FeaturedProductsTabs({ products, title }: ProductCarouselProps) 
 
         {/* Products Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-          {filteredProducts.map((product, i) => (
+          {filteredProducts.slice(0, 8).map((product, i) => (
             <ProductCard key={i} product={product} />
           ))}
         </div>
@@ -71,7 +86,7 @@ export function FeaturedProductsTabs({ products, title }: ProductCarouselProps) 
         {/* View All Link */}
         <div className="text-center mt-10">
           <Link
-            href="/search"
+            href={`/collection/${tabs.find(t => t.id === activeTab)?.collection}`}
             className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline underline-offset-4 transition-colors"
           >
             View All Products
