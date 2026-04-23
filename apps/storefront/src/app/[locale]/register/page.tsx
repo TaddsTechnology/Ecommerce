@@ -3,7 +3,6 @@ import {Suspense} from 'react';
 import {getRouteLocale} from '@/i18n/server';
 import {getTranslations} from 'next-intl/server';
 import { RegistrationForm } from "./registration-form";
-import Link from 'next/link';
 
 export async function generateMetadata(): Promise<Metadata> {
     const locale = await getRouteLocale();
@@ -52,25 +51,27 @@ async function RegisterContent({searchParams}: {searchParams: Promise<Record<str
 
 export default async function RegisterPage({searchParams}: PageProps<'/[locale]/register'>) {
     return (
-        <div className="min-h-screen bg-gray-50 flex pt-16">
+        <div className="min-h-screen bg-[var(--color-background)] flex pt-16 md:pt-20">
             {/* Left side - Image */}
-            <div className="hidden lg:flex lg:w-1/2 bg-gray-900 items-center justify-center p-12">
-                <div className="text-center text-white">
-                    <h2 className="text-4xl lg:text-6xl font-bold uppercase tracking-tight">
+            <div className="hidden lg:flex lg:w-1/2 bg-[var(--color-foreground)] items-center justify-center p-12">
+                <div className="text-center text-[var(--color-background)]">
+                    <div className="h-px w-12 bg-[var(--color-gold)] mx-auto mb-8" />
+                    <h2 className="text-4xl lg:text-6xl font-[var(--font-display)] leading-[0.9] uppercase tracking-tight">
                         Join<br/>Us
                     </h2>
-                    <p className="mt-4 text-lg text-white/70">
+                    <p className="mt-4 text-lg text-[var(--color-background)]/60">
                         Create your account
                     </p>
                 </div>
             </div>
 
             {/* Right side - Form */}
-            <div className="flex w-full lg:w-1/2 items-center justify-center px-4 py-12">
+            <div className="flex w-full lg:w-1/2 items-center justify-center px-8 py-12">
                 <div className="w-full max-w-md">
-                    <div className="text-center mb-8">
-                        <h1 className="text-3xl font-bold uppercase tracking-wide">Create Account</h1>
-                        <p className="mt-2 text-gray-500">Fill in your details</p>
+                    <div className="mb-8">
+                        <div className="h-px w-12 bg-[var(--color-gold)] mb-6" />
+                        <h1 className="text-3xl font-[var(--font-display)] leading-[0.9] uppercase">Create Account</h1>
+                        <p className="mt-2 text-[var(--color-muted)]">Fill in your details</p>
                     </div>
                     
                     <Suspense fallback={<RegistrationFormSkeleton />}>

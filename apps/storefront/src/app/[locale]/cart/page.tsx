@@ -20,12 +20,24 @@ export default async function CartPage() {
     const t = await getTranslations({locale, namespace: 'Cart'});
 
     return (
-        <div className="container mx-auto px-4 py-20">
-            <h1 className="text-3xl font-bold mb-8">{t('title')}</h1>
+        <div className="min-h-screen bg-[var(--color-background)]">
+            {/* Hero-style header */}
+            <div className="bg-[var(--color-foreground)] text-[var(--color-background)] py-16 md:py-20">
+                <div className="container mx-auto px-8 md:px-16">
+                    {/* Decorative line */}
+                    <div className="h-px w-12 bg-[var(--color-gold)] mb-6" />
+                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-[var(--font-display)] leading-[0.9]">
+                        {t('title')}
+                    </h1>
+                </div>
+            </div>
 
-            <Suspense fallback={<CartSkeleton />}>
-                <Cart/>
-            </Suspense>
+            {/* Cart content */}
+            <div className="container mx-auto px-8 md:px-16 py-12">
+                <Suspense fallback={<CartSkeleton />}>
+                    <Cart/>
+                </Suspense>
+            </div>
         </div>
     );
 }
