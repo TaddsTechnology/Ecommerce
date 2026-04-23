@@ -7,8 +7,19 @@ import { useRouter } from "next/navigation";
 import { Search as SearchIcon, Heart, ShoppingBag, Menu } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useWishlistStore } from "@/hooks/use-wishlist";
+import { NavbarCollections } from "./navbar/navbar-collections";
 
-export function Navbar() {
+interface Collection {
+  id: string;
+  name: string;
+  slug: string;
+}
+
+interface NavbarProps {
+  collections?: Collection[];
+}
+
+export function Navbar({ collections = [] }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
@@ -17,6 +28,17 @@ export function Navbar() {
   const wishlistItems = useWishlistStore((state) => state.items);
   const wishlistCount = wishlistItems.length;
   const cartCount = 0;
+
+  const defaultLinks = [
+    { href: "/", label: "Home" },
+    { href: "/search", label: "All Products" },
+    { href: "/collection/new-arrivals", label: "New Arrivals" },
+    { href: "/collection/sale", label: "Sale" },
+  ];
+
+  const navLinks = collections.length > 0 
+    ? collections.slice(0, 5).map(c => ({ href: `/collection/${c.slug}`, label: c.name }))
+    : defaultLinks;
 
   useEffect(() => {
     setIsMounted(true);
@@ -30,12 +52,7 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const navLinks = [
-    { href: "/", label: "Home" },
-    { href: "/search", label: "All Products" },
-    { href: "/collection/new", label: "New Arrivals" },
-    { href: "/collection/sale", label: "Sale" },
-  ];
+  if (!isMounted) return null;
 
   return (
     <header
@@ -45,7 +62,7 @@ export function Navbar() {
           : "bg-white"
       }`}
     >
-      {/* Top banner - promotional */}
+      {/* Top banner */}
       <div className="hidden bg-[var(--color-primary)] text-white text-center text-xs font-medium py-2 px-4">
         FREE SHIPPING ON ORDERS OVER $150 · FREE RETURNS
       </div>
@@ -57,7 +74,7 @@ export function Navbar() {
           <Image src="/vendure.svg" alt="Logo" width={32} height={32} className="h-8 w-8 bg-[var(--color-primary)]" />
         </Link>
 
-        {/* Center: Category links - hidden on mobile */}
+        {/* Center: Category links */}
         <div className="hidden md:flex items-center gap-6">
           {navLinks.map((link) => (
             <Link
@@ -77,76 +94,68 @@ export function Navbar() {
             <SearchIcon className="w-5 h-5" />
           </Link>
 
-          {/* Search - desktop only */}
-          <form action="/search" className="hidden md:block relative">
-            <div className="relative">
+          {/* Search - desktop */}
+          <div className="hidden md:block relative">
+            <form onSubmit={(e) => { e.preventDefault(); if (searchQuery.trim()) router.push(`/search?q=${encodeURIComponent(searchQuery)}`); }}>
               <Input
                 type="search"
-                name="q"
-                placeholder="Search"
+                placeholder="Search products..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-48 lg:w-64 h-10 pl-4 pr-10 rounded-full bg-[var(--color-grey-100)] border-0 focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]"
+                className="w-48 lg:w-64 h-9 pl-9 pr-4 bg-gray-50 border-0 rounded-full text-sm focus:ring-1 focus:ring-primary"
               />
-              <button type="submit" className="absolute right-3 top-1/2 -translate-y-1/2">
-                <SearchIcon className="w-5 h-5 text-[var(--color-text-secondary)]" />
-              </button>
-            </div>
-          </form>
+              <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            </form>
+          </div>
 
           {/* Wishlist */}
-          <Link href="/account/wishlist" className="relative p-2 rounded-full hover:bg-[var(--color-grey-100)]">
+          <Link href="/account/wishlist" className="p-2 relative">
             <Heart className="w-5 h-5" />
-            {isMounted && wishlistCount > 0 && (
-              <span className="absolute -top-1 -right-1 w-5 h-5 bg-[var(--color-primary)] text-white text-xs rounded-full flex items-center justify-center">
+            {wishlistCount > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
                 {wishlistCount}
               </span>
             )}
           </Link>
 
           {/* Cart */}
-          <Link href="/cart" className="relative p-2 rounded-full hover:bg-[var(--color-grey-100)]">
+          <Link href="/cart" className="p-2 relative">
             <ShoppingBag className="w-5 h-5" />
-            {isMounted && cartCount > 0 && (
-              <span className="absolute -top-1 -right-1 w-5 h-5 bg-[var(--color-primary)] text-white text-xs rounded-full flex items-center justify-center">
+            {cartCount > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
                 {cartCount}
               </span>
             )}
           </Link>
 
-          {/* Sign In */}
-          <Link href="/sign-in" className="hidden md:block text-sm font-medium hover:text-[var(--color-grey-500)]">
-            Sign In
-          </Link>
-
-          {/* Mobile: Menu */}
-          <button onClick={() => setIsMobileMenuOpen(true)} className="md:hidden p-2">
+          {/* Mobile menu */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="md:hidden p-2"
+            aria-label="Menu"
+          >
             <Menu className="w-5 h-5" />
           </button>
-          {isMobileMenuOpen && (
-            <div className="fixed inset-0 z-50 bg-black/50" onClick={() => setIsMobileMenuOpen(false)}>
-              <div className="fixed left-0 top-0 bottom-0 w-[300px] bg-white p-6" onClick={(e) => e.stopPropagation()}>
-                <div className="flex justify-between items-center mb-6">
-                  <span className="font-bold">Menu</span>
-                  <button onClick={() => setIsMobileMenuOpen(false)}>✕</button>
-                </div>
-                <div className="flex flex-col gap-4">
-                  {navLinks.map((link) => (
-                    <Link
-                      key={link.href + link.label}
-                      href={link.href}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="text-lg font-medium text-[var(--color-text-primary)] hover:text-[var(--color-grey-500)]"
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       </nav>
+
+      {/* Mobile menu */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden bg-white border-t border-[var(--color-border)]">
+          <div className="flex flex-col py-4 px-4 gap-2">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href + link.label}
+                href={link.href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="py-2 px-4 text-sm font-medium text-[var(--color-text-primary)] hover:bg-gray-50 rounded-lg"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
     </header>
   );
 }
