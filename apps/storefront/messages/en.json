@@ -476,6 +476,7 @@
     "pageTitle": "Contact Us",
     "pageDescription": "Get in touch with our team. We're here to help with any questions you may have.",
     "sendMessage": "Send Us a Message",
+    "formDescription": "Fill out the form below and we'll get back to you as soon as possible.",
     "contactInfo": "Contact Information",
     "email": "Email",
     "phone": "Phone",
@@ -489,5 +490,228 @@
     "saturday": "Saturday",
     "sunday": "Sunday",
     "closed": "Closed"
+  },
+  "FAQ": {
+    "pageTitle": "Frequently Asked Questions",
+    "pageDescription": "Find answers to common questions about our products, shipping, returns, and more.",
+    "stillHaveQuestions": "Still have questions?",
+    "contactUs": "Contact Us",
+    "questions": {
+      "shipping": {
+        "question": "What are your shipping options?",
+        "answer": "We offer standard shipping (5-7 business days), express shipping (2-3 business days), and next-day delivery for select areas. Free standard shipping is available on orders over $50."
+      },
+      "returns": {
+        "question": "What is your return policy?",
+        "answer": "We accept returns within 30 days of purchase. Items must be unused and in their original packaging. Simply contact our support team to initiate a return and receive a prepaid shipping label."
+      },
+      "tracking": {
+        "question": "How can I track my order?",
+        "answer": "Once your order ships, you'll receive an email with a tracking number. You can also view your order status anytime by logging into your account and visiting the order history section."
+      },
+      "international": {
+        "question": "Do you offer international shipping?",
+        "answer": "Yes! We ship to over 50 countries worldwide. International shipping rates and delivery times vary by location. You can see the exact cost at checkout before completing your purchase."
+      },
+      "payment": {
+        "question": "What payment methods do you accept?",
+        "answer": "We accept all major credit cards (Visa, MasterCard, American Express), PayPal, Apple Pay, Google Pay, and Buy Now Pay Later options."
+      },
+      "warranty": {
+        "question": "Do you offer a warranty on products?",
+        "answer": "Yes, all products come with a manufacturer's warranty. The warranty period varies by product and is specified on each product page. Our 30-day satisfaction guarantee also protects your purchase."
+      },
+      "size": {
+        "question": "How do I find my size?",
+        "answer": "Each product page includes a detailed size guide. You can also find measurement charts in our Size Guide section. If you're between sizes, we recommend sizing up for a comfortable fit."
+      },
+      "contact": {
+        "question": "How can I contact customer support?",
+        "answer": "You can reach us via email at support@brand.com, by phone at +1 (800) 123-4567, or through our contact form. Our team is available Monday-Friday 9AM-6PM EST."
+      }
+    }
+  },
+  "About": {
+    "pageTitle": "About Us",
+    "heroTitle": "Crafted for Excellence",
+    "heroDescription": "We believe in the power of exceptional design and quality. Our journey began with a simple mission: to bring curated excellence to discerning customers worldwide.",
+    "storyTitle": "Our Story",
+    "storyParagraph1": "Founded in 2015, we set out to redefine the shopping experience by focusing on what truly matters: quality, craftsmanship, and timeless design.",
+    "storyParagraph2": "Every piece in our collection is carefully selected from artisans and manufacturers who share our commitment to excellence. We believe that true luxury lies in the details.",
+    "storyParagraph3": "Today, we continue to source the finest products while maintaining our founding principles of integrity, sustainability, and exceptional customer service.",
+    "valuesTitle": "Our Values",
+    "valuesDescription": "The principles that guide everything we do",
+    "values": {
+      "quality": {
+        "title": "Quality",
+        "description": "We never compromise on quality. Every product is selected for its exceptional craftsmanship and durability."
+      },
+      "sustainability": {
+        "title": "Sustainability",
+        "description": "We're committed to responsible sourcing and minimizing our environmental impact throughout the supply chain."
+      },
+      "craftsmanship": {
+        "title": "Craftsmanship",
+        "description": "We celebrate artisanship and support skilled craftsmen who pour their expertise into every piece."
+      }
+    },
+    "stats": {
+      "years": { "number": "10+", "label": "Years of Excellence" },
+      "customers": { "number": "50K+", "label": "Happy Customers" },
+      "products": { "number": "1000+", "label": "Curated Products" },
+      "countries": { "number": "30+", "label": "Countries Served" }
+    },
+    "ctaTitle": "Join Our Journey",
+    "ctaDescription": "Experience the difference of shopping with a brand that truly cares about quality and customer satisfaction.",
+    "ctaButton": "Contact Us"
+  },
+  "Returns": {
+    "pageTitle": "Returns & Refunds",
+    "pageDescription": "We want you to love your purchase. If you're not completely satisfied, our easy return process ensures a hassle-free experience.",
+    "howItWorks": "How It Works",
+    "steps": {
+      "1": { "title": "Initiate", "desc": "Start your return online or contact us" },
+      "2": { "title": "Ship", "desc": "Use our prepaid label to send back" },
+      "3": { "title": "Inspect", "desc": "We inspect your return within 3-5 days" },
+      "4": { "title": "Refund", "desc": "Full refund issued to original payment" }
+    },
+    "policy": {
+      "title": "Return Policy",
+      "description": "We offer a 30-day return policy for all unused items in original packaging:",
+      "point1": "Items must be unworn, unused, and with all tags attached",
+      "point2": "Original packaging and all accessories must be included",
+      "point3": "Personalized or custom items cannot be returned",
+      "point4": "Sale items can be returned for store credit only"
+    },
+    "refunds": {
+      "title": "Refunds",
+      "description": "Refunds are processed within 5-7 business days after inspection. The amount will be credited to your original payment method. Please note that shipping costs are non-refundable unless the return is due to our error."
+    },
+    "exchanges": {
+      "title": "Exchanges",
+      "description": "We offer free exchanges for different sizes or colors. Simply indicate your preference when initiating the return. Exchange processing typically takes 3-5 business days after we receive your return."
+    },
+    "exclusions": {
+      "title": "Non-Returnable Items",
+      "point1": "Intimate apparel and swimwear",
+      "point2": "Final sale items",
+      "point3": "Products damaged due to misuse or improper care"
+    },
+    "needHelp": "Need Help?",
+    "needHelpDesc": "Our team is here to assist you with any questions about returns.",
+    "contactUs": "Contact Us"
+  },
+  "Terms": {
+    "pageTitle": "Terms of Service",
+    "lastUpdated": "Last updated: January 2026",
+    "sections": {
+      "acceptance": {
+        "title": "Acceptance of Terms",
+        "content": "By accessing and using this website, you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by these terms, please do not use this service."
+      },
+      "intellectual": {
+        "title": "Intellectual Property",
+        "content": "All content on this website, including text, graphics, logos, images, and software, is the property of our company and is protected by copyright and intellectual property laws. You may not reproduce, distribute, or modify any content without our written permission."
+      },
+      "userConduct": {
+        "title": "User Conduct",
+        "content": "You agree not to use this website for any unlawful purpose or in any way that could damage, disable, or impair the website. You also agree not to attempt to gain unauthorized access to any part of the website."
+      },
+      "products": {
+        "title": "Products and Orders",
+        "content": "We strive to display products as accurately as possible. However, we cannot guarantee that your monitor's display will be accurate. All orders are subject to availability and acceptance. We reserve the right to refuse or cancel any order at our discretion."
+      },
+      "account": {
+        "title": "Account Responsibilities",
+        "content": "You are responsible for maintaining the confidentiality of your account information and for all activities that occur under your account. You agree to notify us immediately of any unauthorized use of your account."
+      },
+      "limitation": {
+        "title": "Limitation of Liability",
+        "content": "Our company shall not be liable for any indirect, incidental, special, or consequential damages arising out of your use of this website or any products purchased from us."
+      },
+      "governing": {
+        "title": "Governing Law",
+        "content": "These terms shall be governed by and construed in accordance with the laws of the jurisdiction in which our company is registered, without regard to its conflict of law provisions."
+      }
+    },
+    "contactInfo": "For questions about these Terms, please contact us at",
+    "contactLink": "Contact Us"
+  },
+  "Privacy": {
+    "pageTitle": "Privacy Policy",
+    "lastUpdated": "Last updated: January 2026",
+    "sections": {
+      "collection": {
+        "title": "Information We Collect",
+        "content": "We collect information you provide directly to us, including name, email address, phone number, and payment information when making a purchase. We also automatically collect certain information when you visit our website, such as IP address and browsing behavior."
+      },
+      "usage": {
+        "title": "How We Use Your Information",
+        "content": "We use the information we collect to provide and improve our services, process transactions, communicate with you about orders and promotions, and comply with legal obligations."
+      },
+      "protection": {
+        "title": "Data Protection",
+        "content": "We implement appropriate technical and organizational measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. All payment information is encrypted using industry-standard security protocols."
+      },
+      "cookies": {
+        "title": "Cookies",
+        "content": "We use cookies and similar tracking technologies to enhance your browsing experience, analyze website traffic, and for security purposes. You can control cookie preferences through your browser settings."
+      },
+      "thirdParty": {
+        "title": "Third-Party Services",
+        "content": "We may share your information with third-party service providers who assist us in operating our website, processing payments, and delivering orders. These parties are obligated to maintain the confidentiality of your information."
+      },
+      "retention": {
+        "title": "Data Retention",
+        "content": "We retain your personal information for as long as necessary to fulfill the purposes outlined in this policy, unless a longer retention period is required by law."
+      },
+      "rights": {
+        "title": "Your Rights",
+        "content": "You have the right to access, correct, or delete your personal information. You may also opt out of receiving marketing communications at any time by contacting us or using the unsubscribe link in our emails."
+      },
+      "children": {
+        "title": "Children's Privacy",
+        "content": "Our website is not intended for children under 13 years of age. We do not knowingly collect personal information from children under 13."
+      },
+      "changes": {
+        "title": "Changes to This Policy",
+        "content": "We may update this privacy policy from time to time. We will notify you of any changes by posting the new policy on this page and updating the effective date."
+      }
+    },
+    "contactInfo": "For questions about this Privacy Policy, please contact us at",
+    "contactLink": "Contact Us"
+  },
+  "Cookies": {
+    "pageTitle": "Cookie Policy",
+    "lastUpdated": "Last updated: January 2026",
+    "introduction": "This Cookie Policy explains what cookies are and how we use them on our website. By continuing to browse our site, you agree to our use of cookies.",
+    "typesTitle": "Types of Cookies We Use",
+    "types": {
+      "essential": {
+        "title": "Essential Cookies",
+        "description": "These cookies are necessary for the website to function properly. They enable basic features like page navigation, secure areas access, and remembering items in your cart. The website cannot function without these cookies."
+      },
+      "analytics": {
+        "title": "Analytics Cookies",
+        "description": "These cookies help us understand how visitors interact with our website by collecting and reporting information anonymously. This helps us improve the site performance and user experience."
+      },
+      "functional": {
+        "title": "Functional Cookies",
+        "description": "These cookies enable enhanced functionality and personalization, such as live chat support and personalized recommendations. They may be set by us or third-party providers whose services we've added to our pages."
+      },
+      "marketing": {
+        "title": "Marketing Cookies",
+        "description": "These cookies are used to track visitors across websites. The intention is to display ads that are relevant and engaging for the individual user. They help us measure campaign effectiveness and deliver personalized content."
+      }
+    },
+    "manageTitle": "Managing Your Cookie Preferences",
+    "manageDescription": "You can manage your cookie preferences at any time by:",
+    "managePoint1": "Using our cookie consent banner to customize your preferences",
+    "managePoint2": "Adjusting your browser settings to block or delete cookies",
+    "managePoint3": "Contacting us directly for assistance with specific cookie concerns",
+    "updatesTitle": "Updates to This Policy",
+    "updatesDescription": "We may update this Cookie Policy periodically. Any changes will be posted on this page with an updated effective date. We encourage you to review this policy regularly to stay informed about how we use cookies.",
+    "contactInfo": "For questions about our Cookie Policy, please contact us at",
+    "contactLink": "Contact Us"
   }
 }

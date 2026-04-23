@@ -59,18 +59,30 @@ export default async function CheckoutPage() {
         paymentMethodsRes.data.eligiblePaymentMethods?.filter((m) => m.isEligible) || [];
 
     return (
-        <div className="container mx-auto px-4 py-8">
-            <h1 className="text-3xl font-bold mb-8">{t('pageTitle')}</h1>
-            <CheckoutProvider
-                order={activeOrder}
-                addresses={addresses}
-                countries={countries}
-                shippingMethods={shippingMethods}
-                paymentMethods={paymentMethods}
-                isGuest={isGuest}
-            >
-                <CheckoutFlow/>
-            </CheckoutProvider>
+        <div className="min-h-screen bg-[var(--color-background)]">
+            {/* Header */}
+            <div className="bg-[var(--color-foreground)] text-[var(--color-background)] py-12 md:py-16">
+                <div className="container mx-auto px-8 md:px-16">
+                    <div className="h-px w-12 bg-[var(--color-gold)] mb-6" />
+                    <h1 className="text-4xl md:text-5xl font-[var(--font-display)] leading-[0.9]">
+                        {t('pageTitle')}
+                    </h1>
+                </div>
+            </div>
+            
+            {/* Checkout content */}
+            <div className="container mx-auto px-8 md:px-16 py-12">
+                <CheckoutProvider
+                    order={activeOrder}
+                    addresses={addresses}
+                    countries={countries}
+                    shippingMethods={shippingMethods}
+                    paymentMethods={paymentMethods}
+                    isGuest={isGuest}
+                >
+                    <CheckoutFlow/>
+                </CheckoutProvider>
+            </div>
         </div>
     );
 }

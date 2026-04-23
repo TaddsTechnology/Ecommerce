@@ -101,7 +101,7 @@ export function CartItems({ activeOrder, t }: { activeOrder: ActiveOrder | null;
     return (
         <div className="lg:col-span-2 divide-y divide-[var(--color-border)]" ref={containerRef}>
             {activeOrder.lines.map((line) => (
-                <div key={line.id} className="flex flex-col sm:flex-row gap-4 p-4 bg-white hover:bg-[var(--color-grey-50)]">
+                <div key={line.id} className="flex flex-col sm:flex-row gap-4 p-4 border border-[var(--color-foreground)] hover:border-[var(--color-gold)] transition-colors duration-300">
                     {line.productVariant.product.featuredAsset && (
                         <Link href={`/product/${line.productVariant.product.slug}`} className="flex-shrink-0">
                             <Image src={line.productVariant.product.featuredAsset.preview} alt={line.productVariant.name} width={120} height={120} className="rounded-lg object-cover w-full sm:w-[120px] h-[120px]" />

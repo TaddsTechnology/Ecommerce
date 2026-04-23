@@ -20,7 +20,6 @@ import {
     BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
 import { notFound } from 'next/navigation';
-import { unstable_cache } from 'next/cache';
 import { Truck, RotateCcw, ShieldCheck, Clock } from 'lucide-react';
 import { routing } from '@/i18n/routing';
 import {
@@ -107,29 +106,27 @@ export default async function ProductDetailPage({params, searchParams}: PageProp
     // Get the primary collection (prefer deepest nested / most specific)
     const primaryCollection = product.collections?.find(c => c.parent?.id) ?? product.collections?.[0];
 
-    return (
+return (
         <>
-            <div className="container mx-auto px-4 py-6 sm:py-8">
-                {/* Breadcrumb Navigation */}
-                <Breadcrumb className="mb-4 sm:mb-6">
+            <div className="container mx-auto px-8 md:px-16 pt-32 md:pt-28">
+                {/* Breadcrumb Navigation - Minimal */}
+                <Breadcrumb className="mb-12">
                     <BreadcrumbList>
                         <BreadcrumbItem>
-                            <BreadcrumbLink render={<Link href="/" />}>{t('home')}</BreadcrumbLink>
+                            <BreadcrumbLink render={<Link href="/"/>} className="text-xs uppercase tracking-[0.2em] text-[var(--color-muted)] hover:text-[var(--color-gold)] transition-colors">{t('home')}</BreadcrumbLink>
                         </BreadcrumbItem>
                         {primaryCollection && (
                             <>
-                                <BreadcrumbSeparator />
+                                <BreadcrumbSeparator className="text-[var(--color-foreground)]/20" />
                                 <BreadcrumbItem>
-                                    <BreadcrumbLink render={<Link href={`/collection/${primaryCollection.slug}`} />}>
+                                    <BreadcrumbLink render={<Link href={`/collection/${primaryCollection.slug}`} />} className="text-xs uppercase tracking-[0.2em] text-[var(--color-muted)] hover:text-[var(--color-gold)] transition-colors">
                                         {primaryCollection.name}
                                     </BreadcrumbLink>
                                 </BreadcrumbItem>
                             </>
                         )}
-                        <BreadcrumbSeparator />
-                        <BreadcrumbItem>
-                            <BreadcrumbPage>{product.name}</BreadcrumbPage>
-                        </BreadcrumbItem>
+                        <BreadcrumbSeparator className="text-[var(--color-foreground)]/20" />
+                        <BreadcrumbPage className="text-xs uppercase tracking-[0.2em] text-[var(--color-foreground)]">{product.name}</BreadcrumbPage>
                     </BreadcrumbList>
                 </Breadcrumb>
 
@@ -146,56 +143,57 @@ export default async function ProductDetailPage({params, searchParams}: PageProp
                 </div>
             </div>
 
-            {/* Shipping & Trust Badges */}
-            <section className="py-8 mt-8 border-y border-border/50">
-                <div className="container mx-auto px-4">
-                    <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8">
-                        <div className="inline-flex items-center gap-2 rounded-full bg-muted/60 px-4 py-2 text-sm font-medium text-muted-foreground">
-                            <Truck className="h-4 w-4 text-primary" />
-                            {t('trustBadges.fastShipping')}
+            {/* Shipping & Trust Badges - Luxury styled */}
+            <section className="py-12 mt-12 border-t border-[var(--color-foreground)]/10">
+                <div className="container mx-auto px-8 md:px-16">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                        <div className="flex items-center gap-3 p-4 border border-[var(--color-foreground)]/10">
+                            <Truck className="h-5 w-5 text-[var(--color-gold)]" />
+                            <span className="text-xs uppercase tracking-[0.15em] text-[var(--color-foreground)]">{t('trustBadges.fastShipping')}</span>
                         </div>
-                        <div className="inline-flex items-center gap-2 rounded-full bg-muted/60 px-4 py-2 text-sm font-medium text-muted-foreground">
-                            <RotateCcw className="h-4 w-4 text-primary" />
-                            {t('trustBadges.freeReturns')}
+                        <div className="flex items-center gap-3 p-4 border border-[var(--color-foreground)]/10">
+                            <RotateCcw className="h-5 w-5 text-[var(--color-gold)]" />
+                            <span className="text-xs uppercase tracking-[0.15em] text-[var(--color-foreground)]">{t('trustBadges.freeReturns')}</span>
                         </div>
-                        <div className="inline-flex items-center gap-2 rounded-full bg-muted/60 px-4 py-2 text-sm font-medium text-muted-foreground">
-                            <ShieldCheck className="h-4 w-4 text-primary" />
-                            {t('trustBadges.secureCheckout')}
+                        <div className="flex items-center gap-3 p-4 border border-[var(--color-foreground)]/10">
+                            <ShieldCheck className="h-5 w-5 text-[var(--color-gold)]" />
+                            <span className="text-xs uppercase tracking-[0.15em] text-[var(--color-foreground)]">{t('trustBadges.secureCheckout')}</span>
                         </div>
-                        <div className="inline-flex items-center gap-2 rounded-full bg-muted/60 px-4 py-2 text-sm font-medium text-muted-foreground">
-                            <Clock className="h-4 w-4 text-primary" />
-                            {t('trustBadges.guarantee')}
+                        <div className="flex items-center gap-3 p-4 border border-[var(--color-foreground)]/10">
+                            <Clock className="h-5 w-5 text-[var(--color-gold)]" />
+                            <span className="text-xs uppercase tracking-[0.15em] text-[var(--color-foreground)]">{t('trustBadges.guarantee')}</span>
                         </div>
                     </div>
                 </div>
             </section>
 
             {/* Store FAQ Section */}
-            <section className="py-16 bg-muted/30">
-                <div className="container mx-auto px-4 max-w-2xl">
-                    <h2 className="text-2xl font-bold text-center mb-8">{t('faq.title')}</h2>
-                    <Accordion className="w-full">
-                        <AccordionItem value="shipping">
-                            <AccordionTrigger>{t('faq.shipping.question')}</AccordionTrigger>
-                            <AccordionContent>
+            <section className="py-16 md:py-24 bg-[var(--color-muted-bg)]">
+                <div className="container mx-auto px-8 md:px-16 max-w-2xl">
+                    <div className="h-px w-12 bg-[var(--color-gold)] mb-8" />
+                    <h2 className="text-3xl font-[var(--font-display)] leading-[0.9] mb-8">{t('faq.title')}</h2>
+                    <Accordion className="w-full border-t border-[var(--color-foreground)]/10">
+                        <AccordionItem value="shipping" className="border-b border-[var(--color-foreground)]/10">
+                            <AccordionTrigger className="text-xs uppercase tracking-[0.2em] py-4">{t('faq.shipping.question')}</AccordionTrigger>
+                            <AccordionContent className="text-sm text-[var(--color-muted)] leading-relaxed">
                                 {t('faq.shipping.answer')}
                             </AccordionContent>
                         </AccordionItem>
-                        <AccordionItem value="returns">
-                            <AccordionTrigger>{t('faq.returns.question')}</AccordionTrigger>
-                            <AccordionContent>
+                        <AccordionItem value="returns" className="border-b border-[var(--color-foreground)]/10">
+                            <AccordionTrigger className="text-xs uppercase tracking-[0.2em] py-4">{t('faq.returns.question')}</AccordionTrigger>
+                            <AccordionContent className="text-sm text-[var(--color-muted)] leading-relaxed">
                                 {t('faq.returns.answer')}
                             </AccordionContent>
                         </AccordionItem>
-                        <AccordionItem value="tracking">
-                            <AccordionTrigger>{t('faq.tracking.question')}</AccordionTrigger>
-                            <AccordionContent>
+                        <AccordionItem value="tracking" className="border-b border-[var(--color-foreground)]/10">
+                            <AccordionTrigger className="text-xs uppercase tracking-[0.2em] py-4">{t('faq.tracking.question')}</AccordionTrigger>
+                            <AccordionContent className="text-sm text-[var(--color-muted)] leading-relaxed">
                                 {t('faq.tracking.answer')}
                             </AccordionContent>
                         </AccordionItem>
-                        <AccordionItem value="international">
-                            <AccordionTrigger>{t('faq.international.question')}</AccordionTrigger>
-                            <AccordionContent>
+                        <AccordionItem value="international" className="border-b border-[var(--color-foreground)]/10">
+                            <AccordionTrigger className="text-xs uppercase tracking-[0.2em] py-4">{t('faq.international.question')}</AccordionTrigger>
+                            <AccordionContent className="text-sm text-[var(--color-muted)] leading-relaxed">
                                 {t('faq.international.answer')}
                             </AccordionContent>
                         </AccordionItem>

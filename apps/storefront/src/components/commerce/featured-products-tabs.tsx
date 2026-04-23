@@ -1,20 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { ProductCard } from '@/components/commerce/product-card';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import { FragmentOf } from '@/graphql';
-import { ProductCardFragment } from '@/lib/vendure/fragments';
+import { ProductGrid } from '@/components/commerce/product-grid';
 import { ArrowRight } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
 
 interface ProductCarouselProps {
   title: string;
-  productsData: {
-    new: Array<FragmentOf<typeof ProductCardFragment>>;
-    bestsellers: Array<FragmentOf<typeof ProductCardFragment>>;
-    sale: Array<FragmentOf<typeof ProductCardFragment>>;
-  };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  productsData: any;
 }
 
 interface Tab {
@@ -47,27 +41,32 @@ export function FeaturedProductsTabs({ productsData, title }: ProductCarouselPro
   const filteredProducts = getProducts();
 
   return (
-    <section className="py-16 md:py-20 bg-white">
-      <div className="container mx-auto px-4 md:px-8">
+    <section className="py-20 md:py-32 bg-[var(--color-background)]">
+      <div className="container mx-auto px-8 md:px-16">
         {/* Header */}
-        <div className="text-center mb-10">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-[#111111]">{title}</h2>
-          <p className="text-gray-500 text-sm md:text-base max-w-xl mx-auto">
-            Discover our curated selection of premium products designed to elevate your lifestyle
+        <div className="text-center mb-16">
+          {/* Decorative line */}
+          <div className="h-px w-16 bg-[var(--color-gold)] mx-auto mb-8" />
+          
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-[var(--font-display)] leading-[0.9] text-[var(--color-foreground)]">
+            {title}
+          </h2>
+          <p className="text-[var(--color-muted)] text-base mt-6 max-w-md mx-auto">
+            Discover our curated selection of timeless pieces designed to elevate your collection
           </p>
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex justify-center mb-10">
-          <div className="inline-flex items-center gap-1 p-1 bg-gray-100 rounded-full">
+        <div className="flex justify-center mb-12">
+          <div className="inline-flex border-b border-[var(--color-foreground)]/20">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
+                className={`px-8 py-4 text-xs uppercase tracking-[0.2em] transition-all duration-500 ${
                   activeTab === tab.id
-                    ? 'bg-white text-black shadow-sm'
-                    : 'text-gray-500 hover:text-gray-700'
+                    ? 'text-[var(--color-foreground)] border-b-2 border-[var(--color-gold)]'
+                    : 'text-[var(--color-muted)] hover:text-[var(--color-foreground)]'
                 }`}
               >
                 {tab.label}
@@ -77,19 +76,15 @@ export function FeaturedProductsTabs({ productsData, title }: ProductCarouselPro
         </div>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-          {filteredProducts.slice(0, 8).map((product, i) => (
-            <ProductCard key={i} product={product} />
-          ))}
-        </div>
+        <ProductGrid products={filteredProducts.slice(0, 8)} />
 
         {/* View All Link */}
-        <div className="text-center mt-10">
+        <div className="text-center mt-12">
           <Link
             href={`/collection/${tabs.find(t => t.id === activeTab)?.collection}`}
-            className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline underline-offset-4 transition-colors"
+            className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-[var(--color-foreground)] hover:text-[var(--color-gold)] transition-colors duration-500"
           >
-            View All Products
+            View All
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>

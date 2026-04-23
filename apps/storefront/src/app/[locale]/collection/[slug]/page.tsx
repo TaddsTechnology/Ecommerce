@@ -7,7 +7,6 @@ import { ProductGrid } from '@/components/commerce/product-grid';
 import { FacetFilters } from '@/components/commerce/facet-filters';
 import { ProductGridSkeleton } from '@/components/shared/product-grid-skeleton';
 import { buildSearchInput, getCurrentPage } from '@/lib/search-helpers';
-import { unstable_cache } from 'next/cache';
 import {
     Breadcrumb,
     BreadcrumbList,

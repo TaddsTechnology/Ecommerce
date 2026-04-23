@@ -1,8 +1,7 @@
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { ChevronLeftIcon, ChevronRightIcon, MoreHorizontalIcon } from "lucide-react"
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
 
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (
@@ -23,7 +22,7 @@ function PaginationContent({
   return (
     <ul
       data-slot="pagination-content"
-      className={cn("flex items-center gap-1", className)}
+      className={cn("flex items-center gap-x-1", className)}
       {...props}
     />
   )
@@ -35,13 +34,12 @@ function PaginationItem({ ...props }: React.ComponentProps<"li">) {
 
 type PaginationLinkProps = {
   isActive?: boolean
-} & Pick<React.ComponentProps<typeof Button>, "size"> &
-  React.ComponentProps<"a">
+} & React.ComponentProps<"a">
 
 function PaginationLink({
   className,
   isActive,
-  size = "icon",
+  children,
   ...props
 }: PaginationLinkProps) {
   return (
@@ -50,30 +48,33 @@ function PaginationLink({
       data-slot="pagination-link"
       data-active={isActive}
       className={cn(
-        "inline-flex items-center justify-center rounded-[30px] text-sm font-medium transition-colors",
-        isActive ? "border border-[var(--color-border)] bg-transparent" : "hover:bg-[var(--color-grey-100)]",
-        size === "icon" ? "h-10 w-10" : "h-9 px-3",
+        "inline-flex items-center justify-center text-xs uppercase tracking-[0.15em] transition-all duration-300 relative",
+        isActive 
+          ? "text-[var(--color-gold)] font-medium" 
+          : "text-[var(--color-foreground)]/60 hover:text-[var(--color-foreground)] hover:border-b hover:border-[var(--color-gold)]",
+        "h-10 min-w-[40px] px-3 border-b-2 border-transparent",
         className
       )}
       {...props}
-    />
+    >
+      {children}
+    </a>
   )
 }
 
 function PaginationPrevious({
   className,
-  text = "Previous",
+  text = "Prev",
   ...props
 }: React.ComponentProps<typeof PaginationLink> & { text?: string }) {
   return (
     <PaginationLink
       aria-label="Go to previous page"
-      size="default"
-      className={cn("pl-2!", className)}
+      className={cn("gap-1", className)}
       {...props}
     >
-      <ChevronLeftIcon data-icon="inline-start" />
-      <span className="hidden sm:block">{text}</span>
+      <ChevronLeftIcon className="h-3 w-3" />
+      {text}
     </PaginationLink>
   )
 }
@@ -86,12 +87,11 @@ function PaginationNext({
   return (
     <PaginationLink
       aria-label="Go to next page"
-      size="default"
-      className={cn("pr-2!", className)}
+      className={cn("gap-1", className)}
       {...props}
     >
-      <span className="hidden sm:block">{text}</span>
-      <ChevronRightIcon data-icon="inline-end" />
+      {text}
+      <ChevronRightIcon className="h-3 w-3" />
     </PaginationLink>
   )
 }
@@ -105,14 +105,12 @@ function PaginationEllipsis({
       aria-hidden
       data-slot="pagination-ellipsis"
       className={cn(
-        "flex size-9 items-center justify-center [&_svg:not([class*='size-'])]:size-4",
+        "flex size-9 items-center justify-center text-[var(--color-foreground)]/40",
         className
       )}
       {...props}
     >
-      <MoreHorizontalIcon
-      />
-      <span className="sr-only">More pages</span>
+      ...
     </span>
   )
 }

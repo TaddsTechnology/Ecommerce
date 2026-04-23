@@ -5,26 +5,29 @@ import {ProductCard} from './product-card';
 import {Pagination} from '@/components/shared/pagination';
 import {useGSAP} from '@gsap/react';
 import gsap from 'gsap';
+import {FragmentOf} from '@/graphql';
+import {ProductCardFragment} from '@/lib/vendure/fragments';
 
 interface ProductGridProps {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    searchResult: any;
-    currentPage: number;
-    take: number;
-    totalItems: number;
-    t: {
+    searchResult?: any;
+    currentPage?: number;
+    take?: number;
+    totalItems?: number;
+    products?: Array<FragmentOf<typeof ProductCardFragment>>;
+    t?: {
         productCount: string;
         noProductsFound: string;
     };
 }
 
-export function ProductGrid({searchResult, currentPage, take, totalItems, t}: ProductGridProps) {
+export function ProductGrid({searchResult, currentPage, take, totalItems, products, t}: ProductGridProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const gridRef = useRef<HTMLDivElement>(null);
-    const totalPages = Math.ceil(totalItems / take);
+    const totalPages = totalItems ? Math.ceil(totalItems / (take || 12)) : 0;
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const items = searchResult?.items as any[];
+    const items = searchResult?.items as any[] || products || [];
 
     useGSAP(() => {
         if (containerRef.current) {
@@ -51,14 +54,14 @@ export function ProductGrid({searchResult, currentPage, take, totalItems, t}: Pr
     if (!items || items.length === 0) {
         return (
             <div className="text-center py-12">
-                <p className="text-gray-500">{t.noProductsFound}</p>
+                <p className="text-[var(--color-muted)]">{t?.noProductsFound || 'No products found'}</p>
             </div>
         );
     }
 
     return (
-        <div className="space-y-8 md:space-y-10" ref={containerRef}>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6" ref={gridRef}>
+        <div className="space-y-12" ref={containerRef}>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-12" ref={gridRef}>
                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any*/}
                 {items.map((product: any, i: number) => (
                     <ProductCard key={'product-grid-item-' + i} product={product}/>
@@ -66,7 +69,7 @@ export function ProductGrid({searchResult, currentPage, take, totalItems, t}: Pr
             </div>
 
             {totalPages > 1 && (
-                <Pagination currentPage={currentPage} totalPages={totalPages}/>
+                <Pagination currentPage={currentPage || 1} totalPages={totalPages}/>
             )}
         </div>
     );

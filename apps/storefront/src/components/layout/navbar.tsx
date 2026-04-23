@@ -1,13 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Search as SearchIcon, Heart, ShoppingBag, Menu } from "lucide-react";
+import { Search as SearchIcon, Heart, Menu, ShoppingCart } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useWishlistStore } from "@/hooks/use-wishlist";
-import { NavbarCollections } from "./navbar/navbar-collections";
 
 interface Collection {
   id: string;
@@ -23,21 +21,27 @@ export function Navbar({ collections = [] }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
   const wishlistItems = useWishlistStore((state) => state.items);
   const wishlistCount = wishlistItems.length;
-  const cartCount = 0;
+
+  useEffect(() => {
+    setIsMounted(true);
+    const storedCart = typeof window !== 'undefined' ? localStorage.getItem('cartCount') : '0';
+    setCartCount(storedCart ? parseInt(storedCart, 10) : 0);
+  }, []);
 
   const defaultLinks = [
     { href: "/", label: "Home" },
-    { href: "/search", label: "All Products" },
-    { href: "/collection/new-arrivals", label: "New Arrivals" },
+    { href: "/search", label: "Shop" },
+    { href: "/collection/new-arrivals", label: "New" },
     { href: "/collection/sale", label: "Sale" },
   ];
 
   const navLinks = collections.length > 0 
-    ? collections.slice(0, 5).map(c => ({ href: `/collection/${c.slug}`, label: c.name }))
+    ? collections.slice(0, 4).map(c => ({ href: `/collection/${c.slug}`, label: c.name }))
     : defaultLinks;
 
   useEffect(() => {
@@ -56,31 +60,28 @@ export function Navbar({ collections = [] }: NavbarProps) {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isScrolled
-          ? "bg-white border-b border-[var(--color-border)] shadow-sm"
-          : "bg-white"
+          ? "bg-[var(--color-background)]/95 backdrop-blur-sm border-b border-[var(--color-foreground)]/10"
+          : "bg-transparent"
       }`}
     >
-      {/* Top banner */}
-      <div className="hidden bg-[var(--color-primary)] text-white text-center text-xs font-medium py-2 px-4">
-        FREE SHIPPING ON ORDERS OVER $150 · FREE RETURNS
-      </div>
-
       {/* Main nav */}
-      <nav className="flex items-center justify-between h-[60px] px-4 md:px-6 max-w-[1920px] mx-auto">
+      <nav className="flex items-center justify-between h-16 md:h-20 px-8 md:px-16 max-w-[1920px] mx-auto">
         {/* Left: Logo */}
         <Link href="/" className="flex-shrink-0">
-          <Image src="/vendure.svg" alt="Logo" width={32} height={32} className="h-8 w-8 bg-[var(--color-primary)]" />
+          <span className="text-lg md:text-xl font-[var(--font-display)] tracking-tight text-[var(--color-foreground)]">
+            BRAND
+          </span>
         </Link>
 
         {/* Center: Category links */}
-        <div className="hidden md:flex items-center gap-6">
+        <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
             <Link
               key={link.href + link.label}
               href={link.href}
-              className="text-sm font-medium text-[var(--color-text-primary)] hover:text-[var(--color-grey-500)] transition-colors"
+              className="text-xs uppercase tracking-[0.2em] text-[var(--color-foreground)] hover:text-[var(--color-gold)] transition-colors duration-500"
             >
               {link.label}
             </Link>
@@ -88,7 +89,7 @@ export function Navbar({ collections = [] }: NavbarProps) {
         </div>
 
         {/* Right: Icons */}
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-4">
           {/* Search - mobile only */}
           <Link href="/search" className="md:hidden p-2">
             <SearchIcon className="w-5 h-5" />
@@ -99,12 +100,11 @@ export function Navbar({ collections = [] }: NavbarProps) {
             <form onSubmit={(e) => { e.preventDefault(); if (searchQuery.trim()) router.push(`/search?q=${encodeURIComponent(searchQuery)}`); }}>
               <Input
                 type="search"
-                placeholder="Search products..."
+                placeholder="Search..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-48 lg:w-64 h-9 pl-9 pr-4 bg-gray-50 border-0 rounded-full text-sm focus:ring-1 focus:ring-primary"
+                className="w-32 lg:w-40 h-10 pl-0 pr-0 bg-transparent border-b border-transparent text-xs uppercase tracking-wider focus:border-b-2 focus:border-[var(--color-gold)]"
               />
-              <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             </form>
           </div>
 
@@ -112,17 +112,22 @@ export function Navbar({ collections = [] }: NavbarProps) {
           <Link href="/account/wishlist" className="p-2 relative">
             <Heart className="w-5 h-5" />
             {wishlistCount > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+              <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[var(--color-gold)] text-[var(--color-foreground)] text-[10px] font-medium flex items-center justify-center">
                 {wishlistCount}
               </span>
             )}
           </Link>
 
-          {/* Cart */}
-          <Link href="/cart" className="p-2 relative">
-            <ShoppingBag className="w-5 h-5" />
+          {/* Sign In / Account */}
+          <Link href="/sign-in" className="text-xs uppercase tracking-[0.2em] hover:text-[var(--color-gold)] transition-colors duration-500 hidden md:block">
+            Sign In
+          </Link>
+
+          {/* Cart - with count */}
+          <Link href="/cart" className="p-2 relative hover:text-[var(--color-gold)] transition-colors duration-500">
+            <ShoppingCart className="w-5 h-5" />
             {cartCount > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+              <span className="absolute -top-0.5 -right-0.5 bg-[var(--color-gold)] text-[var(--color-foreground)] text-[10px] font-medium rounded-full h-4 w-4 flex items-center justify-center">
                 {cartCount}
               </span>
             )}
@@ -141,14 +146,14 @@ export function Navbar({ collections = [] }: NavbarProps) {
 
       {/* Mobile menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-white border-t border-[var(--color-border)]">
-          <div className="flex flex-col py-4 px-4 gap-2">
+        <div className="md:hidden bg-[var(--color-background)] border-t border-[var(--color-foreground)]/10">
+          <div className="flex flex-col py-8 px-8 gap-4">
             {navLinks.map((link) => (
               <Link
                 key={link.href + link.label}
                 href={link.href}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="py-2 px-4 text-sm font-medium text-[var(--color-text-primary)] hover:bg-gray-50 rounded-lg"
+                className="py-3 text-xs uppercase tracking-[0.2em] text-[var(--color-foreground)] hover:text-[var(--color-gold)] transition-colors duration-300 border-b border-[var(--color-foreground)]/10"
               >
                 {link.label}
               </Link>

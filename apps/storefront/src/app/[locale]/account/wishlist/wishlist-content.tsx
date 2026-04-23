@@ -1,14 +1,12 @@
 'use client';
 
 import {useWishlistStore} from '@/hooks/use-wishlist';
-import {useTranslations} from 'next-intl';
 import Image from 'next/image';
 import Link from 'next/link';
 import {Heart, ShoppingBag, Trash2} from 'lucide-react';
 import {toast} from 'sonner';
 
 export function WishlistContent() {
-    const t = useTranslations('Account');
     const {items, removeItem} = useWishlistStore();
 
     if (items.length === 0) {

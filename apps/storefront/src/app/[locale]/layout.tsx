@@ -1,7 +1,7 @@
 import type {Metadata, Viewport} from "next";
 import {locale as rootLocale} from "next/root-params";
 import {hasLocale, NextIntlClientProvider} from "next-intl";
-import {Plus_Jakarta_Sans} from "next/font/google";
+import {Plus_Jakarta_Sans, Playfair_Display} from "next/font/google";
 import {getMessages, getTranslations, setRequestLocale} from "next-intl/server";
 import {notFound} from "next/navigation";
 import {routing} from "@/i18n/routing";
@@ -12,6 +12,8 @@ import {Navbar} from "@/components/layout/navbar";
 import {Footer} from "@/components/layout/footer";
 import {ThemeProvider} from "@/components/providers/theme-provider";
 import {LenisProvider} from "@/components/providers/lenis-provider";
+import {PopupManager} from "@/components/ui/popup";
+import {CookieConsent} from "@/components/ui/cookie-consent";
 import {SITE_NAME, SITE_URL} from "@/lib/metadata";
 import {getTopCollections} from "@/lib/vendure/cached";
 import "./globals.css";
@@ -19,6 +21,12 @@ import "./globals.css";
 const jakarta = Plus_Jakarta_Sans({
     variable: "--font-jakarta",
     subsets: ["latin"],
+});
+
+const playfair = Playfair_Display({
+    variable: "--font-playfair",
+    subsets: ["latin"],
+    display: "swap",
 });
 
 export function generateStaticParams() {
@@ -100,12 +108,24 @@ export default async function LocaleLayout({children}: {children: React.ReactNod
     return (
         <html lang={locale} data-scroll-behavior="smooth" suppressHydrationWarning>
             <body
-                className={`${jakarta.variable} antialiased flex flex-col min-h-screen`}
+                className={`${jakarta.variable} ${playfair.variable} antialiased flex flex-col min-h-screen`}
             >
                 <NextIntlClientProvider locale={locale} messages={messages}>
                     <ThemeProvider>
                         <LenisProvider>
+                            {/* Visible grid lines */}
+                            <div className="fixed inset-0 pointer-events-none z-50 hidden md:block">
+                                <div className="absolute left-[16.666%] top-0 bottom-0 w-px bg-[var(--color-foreground)]/10" />
+                                <div className="absolute left-[33.333%] top-0 bottom-0 w-px bg-[var(--color-foreground)]/10" />
+                                <div className="absolute left-[50%] top-0 bottom-0 w-px bg-[var(--color-foreground)]/10" />
+                                <div className="absolute left-[66.666%] top-0 bottom-0 w-px bg-[var(--color-foreground)]/10" />
+                                <div className="absolute left-[83.333%] top-0 bottom-0 w-px bg-[var(--color-foreground)]/10" />
+                            </div>
+                            {/* Paper texture overlay */}
+                            <div className="paper-texture hidden" aria-hidden="true" />
                             <Navbar collections={collections} />
+                            <PopupManager />
+                            <CookieConsent />
                             {children}
                             <Footer/>
                             <Toaster/>

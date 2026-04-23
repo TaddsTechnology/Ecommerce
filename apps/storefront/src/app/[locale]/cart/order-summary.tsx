@@ -18,12 +18,12 @@ type ActiveOrder = {
 export async function OrderSummary({activeOrder}: { activeOrder: ActiveOrder }) {
     const t = await getTranslations('Cart');
     return (
-        <div className="border rounded-xl p-6 bg-card sticky top-24 shadow-sm">
-            <h2 className="text-xl font-bold mb-4">{t('orderSummary')}</h2>
+        <div className="border border-[var(--color-foreground)] p-6 bg-[var(--color-background)]">
+            <h2 className="text-xl font-[var(--font-display)] leading-[0.9] mb-6">{t('orderSummary')}</h2>
 
-            <div className="space-y-2 mb-4">
+            <div className="space-y-3 mb-6">
                 <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">{t('subtotal')}</span>
+                    <span className="text-[var(--color-muted)]">{t('subtotal')}</span>
                     <span>
                         <Price value={activeOrder.subTotalWithTax} currencyCode={activeOrder.currencyCode}/>
                     </span>
@@ -41,7 +41,7 @@ export async function OrderSummary({activeOrder}: { activeOrder: ActiveOrder }) 
                     </>
                 )}
                 <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">{t('shipping')}</span>
+                    <span className="text-[var(--color-muted)]">{t('shipping')}</span>
                     <span>
                         {activeOrder.shippingWithTax > 0
                             ? <Price value={activeOrder.shippingWithTax} currencyCode={activeOrder.currencyCode}/>
@@ -50,23 +50,23 @@ export async function OrderSummary({activeOrder}: { activeOrder: ActiveOrder }) 
                 </div>
             </div>
 
-            <div className="border-t pt-4 mb-6">
-                <div className="flex justify-between items-baseline text-lg font-bold">
-                    <span>{t('total')}</span>
-                    <span className="text-2xl">
+            <div className="border-t border-[var(--color-foreground)]/10 pt-4 mb-6">
+                <div className="flex justify-between items-baseline">
+                    <span className="font-[var(--font-display)]">{t('total')}</span>
+                    <span className="text-2xl font-[var(--font-display)]">
                         <Price value={activeOrder.totalWithTax} currencyCode={activeOrder.currencyCode}/>
                     </span>
                 </div>
             </div>
 
-            <Link href="/checkout" className="inline-flex items-center justify-center rounded-[30px] bg-[var(--color-primary)] text-white h-14 px-6 font-medium w-full">{t('proceedToCheckout')}</Link>
+            <Link href="/checkout" className="inline-flex items-center justify-center bg-[var(--color-foreground)] text-[var(--color-background)] h-14 px-6 font-medium w-full uppercase text-xs tracking-[0.2em]">{t('proceedToCheckout')}</Link>
 
-            <div className="flex items-center justify-center gap-1.5 mt-3 text-xs text-muted-foreground">
+            <div className="flex items-center justify-center gap-1.5 mt-3 text-xs text-[var(--color-muted)]">
                 <Lock className="h-3 w-3" />
                 <span>{t('secureCheckout')}</span>
             </div>
 
-            <Link href="/" className="inline-flex items-center justify-center rounded-[30px] border border-[var(--color-border)] h-12 px-6 font-medium w-full mt-3">{t('continueShopping')}</Link>
+            <Link href="/" className="inline-flex items-center justify-center border border-[var(--color-foreground)]/20 h-12 px-6 font-medium w-full mt-3 uppercase text-xs tracking-[0.2em]">{t('continueShopping')}</Link>
         </div>
     );
 }

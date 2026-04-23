@@ -34,11 +34,15 @@ export async function Cart() {
 
     return (
         <div className="grid lg:grid-cols-3 gap-8">
-            <CartItems activeOrder={activeOrder} t={translations}/>
+            <div className="lg:col-span-2">
+                <CartItems activeOrder={activeOrder} t={translations}/>
+            </div>
 
             <div className="lg:col-span-1">
-                <OrderSummary activeOrder={activeOrder}/>
-                <PromotionCode activeOrder={activeOrder}/>
+                <div className="lg:sticky lg:top-28">
+                    <OrderSummary activeOrder={activeOrder}/>
+                    <PromotionCode activeOrder={activeOrder}/>
+                </div>
             </div>
         </div>
     )

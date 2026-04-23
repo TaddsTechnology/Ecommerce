@@ -16,32 +16,32 @@ export function ProductCard({product: productProp}: ProductCardProps) {
     return (
         <Link
             href={`/product/${product.slug}`}
-            className="group block transition-all duration-300"
+            className="group block transition-all duration-500"
         >
-            <div className="relative aspect-[4/5] bg-gray-50 overflow-hidden">
+            <div className="relative aspect-[4/5] bg-[var(--color-muted-bg)] overflow-hidden">
                 {product.productAsset ? (
                     <Image
                         src={product.productAsset.preview}
                         alt={product.productName}
                         fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        className="object-cover img-grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-[1500ms]"
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     />
                 ) : (
-                    <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+                    <div className="w-full h-full flex items-center justify-center text-[var(--color-muted)]">
                         {t('noImage')}
                     </div>
                 )}
             </div>
-            <div className="py-3">
-                <h3 className="text-sm font-medium leading-tight text-gray-900 line-clamp-2 group-hover:text-gray-600 transition-colors">
+            <div className="py-4 border-t border-[var(--color-foreground)]/10 pt-4">
+                <h3 className="text-sm leading-tight text-[var(--color-foreground)] line-clamp-2 group-hover:text-[var(--color-gold)] transition-colors duration-500">
                     {product.productName}
                 </h3>
-                <p className="text-sm font-medium mt-1 text-gray-900">
+                <p className="text-sm font-medium mt-1 text-[var(--color-foreground)]">
                     {product.priceWithTax.__typename === 'PriceRange' ? (
                         product.priceWithTax.min !== product.priceWithTax.max ? (
                             <>
-                                <span className="text-sm font-normal text-gray-500 mr-1">{t('from')}</span>
+                                <span className="text-sm font-normal text-[var(--color-muted)] mr-1">{t('from')}</span>
                                 <Price value={product.priceWithTax.min} currencyCode={product.currencyCode}/>
                             </>
                         ) : (
