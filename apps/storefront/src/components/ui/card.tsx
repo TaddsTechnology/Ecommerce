@@ -4,15 +4,13 @@ import { cn } from "@/lib/utils"
 
 function Card({
   className,
-  size = "default",
   ...props
-}: React.ComponentProps<"div"> & { size?: "default" | "sm" | "lg" }) {
+}: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card"
-      data-size={size}
       className={cn(
-        "group/card flex flex-col gap-6 overflow-hidden rounded-[12px] bg-card py-6 text-sm text-card-foreground shadow-[var(--shadow-card)] has-[>img:first-child]:pt-0 data-[size=sm]:gap-4 data-[size=sm]:py-4 data-[size=lg]:py-8 *:[img:first-child]:rounded-t-[12px] *:[img:last-child]:rounded-b-[12px]",
+        "group/card flex flex-col gap-6 overflow-hidden border-t border-[var(--color-foreground)]/20 bg-transparent px-0 py-8 text-sm text-card-foreground transition-all duration-500 hover:bg-[var(--color-background)]/50",
         className
       )}
       {...props}
@@ -25,7 +23,7 @@ function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card-header"
       className={cn(
-        "group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-6 group-data-[size=sm]/card:px-4 has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-6 group-data-[size=sm]/card:[.border-b]:pb-4",
+        "group/card-header @container/card-header grid auto-rows-min items-start gap-1 border-b border-[var(--color-foreground)]/10 pb-6",
         className
       )}
       {...props}
@@ -38,7 +36,7 @@ function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card-title"
       className={cn(
-        "text-base leading-normal font-medium group-data-[size=sm]/card:text-sm",
+        "text-2xl leading-[0.9] font-normal font-[var(--font-display)] group-hover:text-[var(--color-gold)] transition-colors duration-500",
         className
       )}
       {...props}
@@ -50,7 +48,7 @@ function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-description"
-      className={cn("text-sm text-muted-foreground", className)}
+      className={cn("text-sm text-[var(--color-muted)]", className)}
       {...props}
     />
   )
@@ -73,7 +71,7 @@ function CardContent({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-content"
-      className={cn("px-6 group-data-[size=sm]/card:px-4", className)}
+      className={cn("", className)}
       {...props}
     />
   )
@@ -84,7 +82,7 @@ function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card-footer"
       className={cn(
-        "flex items-center rounded-b-xl px-6 group-data-[size=sm]/card:px-4 [.border-t]:pt-6 group-data-[size=sm]/card:[.border-t]:pt-4",
+        "flex items-center border-t border-[var(--color-foreground)]/10 pt-6",
         className
       )}
       {...props}
