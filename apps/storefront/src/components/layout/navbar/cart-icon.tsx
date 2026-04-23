@@ -11,10 +11,10 @@ interface CartIconProps {
 export function CartIcon({ cartItemCount }: CartIconProps) {
     const t = useTranslations('Navigation');
     return (
-        <Link href="/cart" className="relative p-2 rounded-full hover:bg-[var(--color-grey-100)] transition-colors">
+        <Link href="/cart" className="p-2 relative hover:text-[var(--color-gold)] transition-colors duration-500">
             <ShoppingCart className="h-5 w-5" />
             {cartItemCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-[var(--color-primary)] text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                <span className="absolute -top-0.5 -right-0.5 bg-[var(--color-gold)] text-[var(--color-foreground)] text-[10px] font-medium rounded-full h-4 w-4 flex items-center justify-center">
                     {cartItemCount}
                 </span>
             )}

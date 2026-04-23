@@ -34,7 +34,7 @@ export async function NavbarCollections({ className }: { className?: string }) {
                 ))}
             </div>
         );
-    } catch (error) {
+    } catch {
         return (
             <div className={className}>
                 <Link href="/search" className="text-sm font-medium text-[var(--color-text-primary)] hover:text-[var(--color-grey-500)] transition-colors">
