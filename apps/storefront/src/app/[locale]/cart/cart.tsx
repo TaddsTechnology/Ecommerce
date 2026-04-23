@@ -4,28 +4,18 @@ import {PromotionCode} from "@/app/[locale]/cart/promotion-code";
 import {getRouteLocale} from "@/i18n/server";
 import {getTranslations} from "next-intl/server";
 import {getActiveCurrencyCode} from "@/lib/currency-server";
-import {unstable_cache} from "next/cache";
 import {query} from "@/lib/vendure/api";
 import {GetActiveOrderQuery} from "@/lib/vendure/queries";
-
-const getActiveOrderCached = unstable_cache(
-    async () => {
-        const locale = await getRouteLocale();
-        const currencyCode = await getActiveCurrencyCode();
-        return query(GetActiveOrderQuery, {}, {
-            useAuthToken: true,
-            languageCode: locale,
-            currencyCode,
-        });
-    },
-    ['cart'],
-    { revalidate: 60, tags: ['cart'] }
-);
 
 export async function Cart() {
     const locale = await getRouteLocale();
     const t = await getTranslations({locale, namespace: 'Cart'});
-    const {data} = await getActiveOrderCached();
+    const currencyCode = await getActiveCurrencyCode();
+    const {data} = await query(GetActiveOrderQuery, {}, {
+        useAuthToken: true,
+        languageCode: locale,
+        currencyCode,
+    });
 
     const activeOrder = data.activeOrder;
 
