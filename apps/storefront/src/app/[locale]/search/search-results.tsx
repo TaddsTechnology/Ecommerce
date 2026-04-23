@@ -2,7 +2,6 @@ import {Suspense} from "react";
 import {getRouteLocale} from "@/i18n/server";
 import {getActiveCurrencyCode} from '@/lib/currency-server';
 import {FacetFilters} from "@/components/commerce/facet-filters";
-import {ProductGridSkeleton} from "@/components/shared/product-grid-skeleton";
 import {ProductGrid } from "@/components/commerce/product-grid";
 import {SearchHeader, SearchHeaderSkeleton} from "./search-header";
 import {buildSearchInput, getCurrentPage} from "@/lib/search-helpers";
@@ -44,10 +43,7 @@ export async function SearchResults({searchParams}: SearchResultsProps) {
         <div>
             {/* Header with Sort + Active Filters */}
             <Suspense fallback={<SearchHeaderSkeleton/>}>
-                <SearchHeader 
-                    searchTerm={searchQuery} 
-                    totalResults={totalResults}
-                />
+                <SearchHeader searchTerm={searchQuery} />
             </Suspense>
 
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mt-6">

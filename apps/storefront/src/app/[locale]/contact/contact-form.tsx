@@ -1,7 +1,6 @@
 'use client';
 
 import {useState} from 'react';
-import {useRouter} from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -11,7 +10,6 @@ interface ContactFormProps {
 }
 
 export function ContactForm({className}: ContactFormProps) {
-    const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
