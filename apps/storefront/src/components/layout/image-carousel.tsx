@@ -18,18 +18,18 @@ interface CarouselSlide {
 const slides: CarouselSlide[] = [
   {
     image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1600&h=800&fit=crop",
-    title: "Premium Quality",
+    title: "Timeless Quality",
     description: "Crafted with the finest materials for lasting excellence",
   },
   {
     image: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1600&h=800&fit=crop",
-    title: "Best Prices",
-    description: "Unbeatable value without compromising on quality",
+    title: "Exceptional Value",
+    description: "Unbeatable quality at accessible prices",
   },
   {
     image: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=1600&h=800&fit=crop",
-    title: "Fast Delivery",
-    description: "Quick and reliable shipping to your doorstep",
+    title: " Swift Delivery",
+    description: "Reliable shipping to your doorstep",
   },
 ];
 
@@ -39,7 +39,7 @@ export function ImageCarousel() {
   );
 
   return (
-    <section className="py-16 bg-white">
+    <section className="py-20 md:py-32 bg-[var(--color-background)]">
       <div className="relative">
         <Carousel
           plugins={[plugin.current]}
@@ -57,18 +57,21 @@ export function ImageCarousel() {
                     src={slide.image}
                     alt={slide.title}
                     fill
-                    className="object-cover"
+                    className="object-cover img-grayscale"
                     priority={index === 0}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-foreground)]/70 via-[var(--color-foreground)]/40 to-transparent" />
                 </div>
                 <div className="relative h-full flex items-center">
-                  <div className="container mx-auto px-6 md:px-12">
+                  <div className="container mx-auto px-8 md:px-16">
                     <div className="max-w-xl">
-                      <h2 className="text-4xl md:text-6xl font-bold text-white uppercase tracking-tight mb-4">
+                      {/* Decorative line */}
+                      <div className="h-px w-12 bg-[var(--color-gold)] mb-6" />
+                      
+                      <h2 className="text-4xl md:text-6xl lg:text-7xl font-[var(--font-display)] leading-[0.9] text-white uppercase tracking-tight mb-4">
                         {slide.title}
                       </h2>
-                      <p className="text-lg md:text-xl text-white/90 font-medium">
+                      <p className="text-lg text-white/70 font-medium">
                         {slide.description}
                       </p>
                     </div>
