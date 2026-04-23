@@ -1,4 +1,3 @@
-import {cacheLife, cacheTag} from 'next/cache';
 import {query} from './api';
 import {GetActiveChannelQuery, GetAvailableCountriesQuery, GetTopCollectionsQuery} from './queries';
 
@@ -8,9 +7,6 @@ import {GetActiveChannelQuery, GetAvailableCountriesQuery, GetTopCollectionsQuer
  * Channel config is language-independent, so no locale parameter needed.
  */
 export async function getActiveChannelCached() {
-    'use cache';
-    cacheLife('hours');
-
     const result = await query(GetActiveChannelQuery);
     return result.data.activeChannel;
 }
@@ -21,10 +17,6 @@ export async function getActiveChannelCached() {
  * Country names are translatable, so locale is required.
  */
 export async function getAvailableCountriesCached(locale: string) {
-    'use cache';
-    cacheLife('max');
-    cacheTag(`countries-${locale}`);
-
     const result = await query(GetAvailableCountriesQuery, undefined, {languageCode: locale});
     return result.data.availableCountries || [];
 }
@@ -35,10 +27,6 @@ export async function getAvailableCountriesCached(locale: string) {
  * Collection names are translatable, so locale is required.
  */
 export async function getTopCollections(locale: string) {
-    'use cache';
-    cacheLife('days');
-    cacheTag(`collections-${locale}`);
-
     const result = await query(GetTopCollectionsQuery, undefined, {languageCode: locale});
     return result.data.collections.items;
 }
