@@ -21,8 +21,7 @@ const nextConfig: NextConfig = {
         ],
     },
     experimental: {
-        rootParams: true,
-        useCache: true
+        rootParams: true
     }
 };
 

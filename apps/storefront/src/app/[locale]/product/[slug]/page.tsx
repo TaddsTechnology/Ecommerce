@@ -20,7 +20,7 @@ import {
     BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
 import { notFound } from 'next/navigation';
-import { cacheLife, cacheTag } from 'next/cache';
+import { unstable_cache } from 'next/cache';
 import { Truck, RotateCcw, ShieldCheck, Clock } from 'lucide-react';
 import { routing } from '@/i18n/routing';
 import {
@@ -35,12 +35,7 @@ import {getActiveCurrencyCode} from '@/lib/currency-server';
 import {getRouteLocale} from '@/i18n/server';
 
 async function getProductData(slug: string, currencyCode: string) {
-    'use cache';
-    cacheLife('hours');
-
     const locale = await getRouteLocale();
-    cacheTag(`product-${slug}-${locale}-${currencyCode}`);
-    cacheTag('products');
 
     return await query(GetProductDetailQuery, {slug}, {languageCode: locale, currencyCode});
 }
