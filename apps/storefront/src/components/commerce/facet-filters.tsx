@@ -1,16 +1,14 @@
 'use client';
 
-import { use, useState } from 'react';
+import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { usePathname, useRouter } from '@/i18n/navigation';
-import { ResultOf } from '@/graphql';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
 import { SlidersHorizontal, ChevronDown } from 'lucide-react';
-import { SearchProductsQuery } from "@/lib/vendure/queries";
 import {useTranslations} from 'next-intl';
 
 interface FacetFiltersProps {

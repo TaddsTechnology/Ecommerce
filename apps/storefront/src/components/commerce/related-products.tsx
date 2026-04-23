@@ -1,12 +1,9 @@
 import { ProductCarousel } from "@/components/commerce/product-carousel";
 import { getRouteLocale } from "@/i18n/server";
-import { unstable_cache } from "next/cache";
 import {getActiveCurrencyCode} from '@/lib/currency-server';
 import { query } from "@/lib/vendure/api";
 import { GetCollectionProductsQuery } from "@/lib/vendure/queries";
-import { readFragment } from "@/graphql";
-import { ProductCardFragment } from "@/lib/vendure/fragments";
-import {getTranslations} from 'next-intl/server';
+import { getTranslations } from 'next-intl/server';
 
 interface RelatedProductsProps {
     collectionSlug: string;
@@ -19,20 +16,31 @@ async function getRelatedProducts(collectionSlug: string, currentProductId: stri
     const result = await query(GetCollectionProductsQuery, {
         slug: collectionSlug,
         input: {
-            collectionSlug: collectionSlug,
-            take: 13, // Fetch extra to account for filtering out current product
+            collectionSlug,
+            collectionSlug2: collectionSlug,
+            collectionSlug3: collectionSlug,
+            collectionSlug4: collectionSlug,
+            term: '',
+            facetValueIds: [],
+            facetValueIds2: [],
+            facetValueIds3: [],
+            facetValueIds4: [],
+            priceRange: { min: 0, max: 0 },
+            priceRange2: { min: 0, max: 0 },
+            priceRange3: { min: 0, max: 0 },
+            priceRange4: { min: 0, max: 0 },
+            take: 13,
             skip: 0,
             groupByProduct: true
         }
     }, {languageCode: locale, currencyCode});
 
     // Filter out the current product and limit to 12
-    return result.data.search.items
-        .filter(item => {
-            const product = readFragment(ProductCardFragment, item);
-            return product.productId !== currentProductId;
-        })
-        .slice(0, 12);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (result.data as any)?.search?.items
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        ?.filter((item: any) => item.productId !== currentProductId)
+        .slice(0, 12) || [];
 }
 
 export async function RelatedProducts({ collectionSlug, currentProductId }: RelatedProductsProps) {
@@ -41,7 +49,7 @@ export async function RelatedProducts({ collectionSlug, currentProductId }: Rela
     const t = await getTranslations({locale, namespace: 'Product'});
     const products = await getRelatedProducts(collectionSlug, currentProductId, currencyCode);
 
-    if (products.length === 0) {
+    if (!products || products.length === 0) {
         return null;
     }
 

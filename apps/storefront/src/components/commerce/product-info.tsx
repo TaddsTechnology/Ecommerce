@@ -78,7 +78,6 @@ export function ProductInfo({product, searchParams, currencyCode}: ProductInfoPr
             removeFromWishlist(product.id);
             toast.success(t('removedFromWishlist'));
         } else {
-            const primaryCollection = product.collections?.[0];
             addToWishlist({
                 id: product.id,
                 name: product.name,
@@ -219,11 +218,11 @@ export function ProductInfo({product, searchParams, currencyCode}: ProductInfoPr
         <div className="space-y-8" ref={containerRef}>
             {/* Product Title & Price */}
             <div>
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight leading-tight" ref={titleRef}>
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-[var(--font-display)] leading-[0.9] tracking-tight" ref={titleRef}>
                     {product.name}
                 </h1>
                 {selectedVariant && (
-                    <p className="text-2xl sm:text-3xl font-bold mt-3 text-gray-900" ref={priceRef}>
+                    <p className="text-xl sm:text-2xl font-[var(--font-display)] mt-3 text-[var(--color-foreground)]" ref={priceRef}>
                         <Price value={selectedVariant.priceWithTax} currencyCode={currencyCode}/>
                     </p>
                 )}
@@ -350,23 +349,23 @@ export function ProductInfo({product, searchParams, currencyCode}: ProductInfoPr
                 </div>
             )}
 
-            {/* Trust Badges */}
-            <div className="border-t pt-6 space-y-4 text-sm text-muted-foreground">
-                <div className="flex items-center justify-between py-2 border-b">
-                    <span className="flex items-center gap-2"><Truck className="h-4 w-4 text-primary" /> Free Shipping</span>
-                    <span>On orders over $150</span>
+            {/* Trust Badges - Luxury */}
+            <div className="border-t border-[var(--color-foreground)]/10 pt-6 space-y-3 text-sm">
+                <div className="flex items-center justify-between py-2 border-b border-[var(--color-foreground)]/10">
+                    <span className="flex items-center gap-3 text-[var(--color-foreground)]"><Truck className="h-4 w-4 text-[var(--color-gold)]" /> Free Shipping</span>
+                    <span className="text-[var(--color-muted)]">On orders over $150</span>
                 </div>
-                <div className="flex items-center justify-between py-2 border-b">
-                    <span className="flex items-center gap-2"><RotateCcw className="h-4 w-4 text-primary" /> Easy Returns</span>
-                    <span>30 days return policy</span>
+                <div className="flex items-center justify-between py-2 border-b border-[var(--color-foreground)]/10">
+                    <span className="flex items-center gap-3 text-[var(--color-foreground)]"><RotateCcw className="h-4 w-4 text-[var(--color-gold)]" /> Easy Returns</span>
+                    <span className="text-[var(--color-muted)]">30 days return policy</span>
                 </div>
-                <div className="flex items-center justify-between py-2 border-b">
-                    <span className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-primary" /> Secure Checkout</span>
-                    <span>100% protected</span>
+                <div className="flex items-center justify-between py-2 border-b border-[var(--color-foreground)]/10">
+                    <span className="flex items-center gap-3 text-[var(--color-foreground)]"><ShieldCheck className="h-4 w-4 text-[var(--color-gold)]" /> Secure Checkout</span>
+                    <span className="text-[var(--color-muted)]">100% protected</span>
                 </div>
                 <div className="flex items-center justify-between py-2">
-                    <span className="flex items-center gap-2"><Clock className="h-4 w-4 text-primary" /> Quick Delivery</span>
-                    <span>2-4 business days</span>
+                    <span className="flex items-center gap-3 text-[var(--color-foreground)]"><Clock className="h-4 w-4 text-[var(--color-gold)]" /> Quick Delivery</span>
+                    <span className="text-[var(--color-muted)]">2-4 business days</span>
                 </div>
             </div>
         </div>

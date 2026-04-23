@@ -1,6 +1,5 @@
 import {FeaturedProductsTabs} from "@/components/commerce/featured-products-tabs";
 import {getRouteLocale} from "@/i18n/server";
-import {unstable_cache} from "next/cache";
 import {getActiveCurrencyCode} from '@/lib/currency-server';
 import {query} from "@/lib/vendure/api";
 import {GetCollectionProductsQuery} from "@/lib/vendure/queries";
