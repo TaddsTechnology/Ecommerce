@@ -8,18 +8,18 @@ import {
     RemovePromotionCodeMutation
 } from '@/lib/vendure/mutations';
 import {getActiveCurrencyCode} from '@/lib/currency-server';
-import {updateTag} from 'next/cache';
+import {revalidateTag} from 'next/cache';
 
 export async function removeFromCart(lineId: string) {
     const currencyCode = await getActiveCurrencyCode();
     await mutate(RemoveFromCartMutation, {lineId}, {useAuthToken: true, currencyCode});
-    updateTag('cart');
+    revalidateTag('cart');
 }
 
 export async function adjustQuantity(lineId: string, quantity: number) {
     const currencyCode = await getActiveCurrencyCode();
     await mutate(AdjustCartItemMutation, {lineId, quantity}, {useAuthToken: true, currencyCode});
-    updateTag('cart');
+    revalidateTag('cart');
 }
 
 export async function applyPromotionCode(formData: FormData) {
@@ -28,7 +28,7 @@ export async function applyPromotionCode(formData: FormData) {
 
     const currencyCode = await getActiveCurrencyCode();
     await mutate(ApplyPromotionCodeMutation, {couponCode: code}, {useAuthToken: true, currencyCode});
-    updateTag('cart');
+    revalidateTag('cart');
 }
 
 export async function removePromotionCode(formData: FormData) {
@@ -37,5 +37,5 @@ export async function removePromotionCode(formData: FormData) {
 
     const currencyCode = await getActiveCurrencyCode();
     await mutate(RemovePromotionCodeMutation, {couponCode: code}, {useAuthToken: true, currencyCode});
-    updateTag('cart');
+    revalidateTag('cart');
 }
