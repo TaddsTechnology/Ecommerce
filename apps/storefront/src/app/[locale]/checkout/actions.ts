@@ -10,7 +10,7 @@ import {
     TransitionOrderToStateMutation,
     SetCustomerForOrderMutation,
 } from '@/lib/vendure/mutations';
-import {revalidatePath, updateTag} from 'next/cache';
+import {revalidatePath, revalidateTag} from 'next/cache';
 import {redirect} from '@/i18n/navigation';
 import {getLocale} from 'next-intl/server';
 
@@ -137,8 +137,8 @@ export async function placeOrder(paymentMethodCode: string) {
     const orderCode = result.data.addPaymentToOrder.code;
 
     // Update the cart tag to immediately invalidate cached cart data
-    updateTag('cart');
-    updateTag('active-order');
+    revalidateTag('cart');
+    revalidateTag('active-order');
 
     const locale = await getLocale();
     redirect({href: `/order-confirmation/${orderCode}`, locale});
