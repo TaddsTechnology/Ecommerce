@@ -13,6 +13,7 @@ import {Footer} from "@/components/layout/footer";
 import {ThemeProvider} from "@/components/providers/theme-provider";
 import {LenisProvider} from "@/components/providers/lenis-provider";
 import {SITE_NAME, SITE_URL} from "@/lib/metadata";
+import {getTopCollections} from "@/lib/vendure/cached";
 import "./globals.css";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -73,6 +74,12 @@ export const viewport: Viewport = {
     ],
 };
 
+interface Collection {
+  id: string;
+  name: string;
+  slug: string;
+}
+
 export default async function LocaleLayout({children}: {children: React.ReactNode}) {
     const locale = await rootLocale();
 
@@ -83,6 +90,13 @@ export default async function LocaleLayout({children}: {children: React.ReactNod
     setRequestLocale(locale);
     const messages = await getMessages({locale});
 
+    let collections: Collection[] = [];
+    try {
+        collections = await getTopCollections(locale) || [];
+    } catch (e) {
+        console.error('Failed to load collections:', e);
+    }
+
     return (
         <html lang={locale} data-scroll-behavior="smooth" suppressHydrationWarning>
             <body
@@ -91,7 +105,7 @@ export default async function LocaleLayout({children}: {children: React.ReactNod
                 <NextIntlClientProvider locale={locale} messages={messages}>
                     <ThemeProvider>
                         <LenisProvider>
-                            <Navbar />
+                            <Navbar collections={collections} />
                             {children}
                             <Footer/>
                             <Toaster/>
