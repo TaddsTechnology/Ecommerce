@@ -1,4 +1,4 @@
-import nextTypescript from "eslint-config-next/typescript";
+import nextTypescript from "eslint-config-next/typescript.js";
 
 const eslintConfig = [
   ...nextTypescript,
