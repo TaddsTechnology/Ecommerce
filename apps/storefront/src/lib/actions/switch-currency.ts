@@ -2,7 +2,7 @@
 
 import {setCurrencyCookie} from '@/lib/currency';
 import {getActiveChannelCached} from '@/lib/vendure/cached';
-import {updateTag} from 'next/cache';
+import {revalidateTag} from 'next/cache';
 
 export async function switchCurrency(currencyCode: string) {
     const channel = await getActiveChannelCached();
@@ -12,8 +12,8 @@ export async function switchCurrency(currencyCode: string) {
 
     await setCurrencyCookie(currencyCode);
 
-    updateTag('products');
-    updateTag('collection');
-    updateTag('cart');
-    updateTag('active-order');
+    revalidateTag('products');
+    revalidateTag('collection');
+    revalidateTag('cart');
+    revalidateTag('active-order');
 }
