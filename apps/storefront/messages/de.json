@@ -14,7 +14,8 @@
     "greeting": "Hallo, {name}",
     "shoppingCart": "Warenkorb",
     "switchLanguage": "Sprache wechseln",
-    "switchCurrency": "Währung wechseln"
+    "switchCurrency": "Währung wechseln",
+    "myWishlist": "Meine Wunschliste"
   },
   "Hero": {
     "title": "Entdecke hochwertige",
