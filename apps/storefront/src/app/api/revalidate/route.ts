@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
             for (const locale of routing.locales) {
                 const localizedTag = `${tag}-${locale}`;
                 try {
-                    revalidateTag(localizedTag, {expire: 0});
+                    revalidateTag(localizedTag);
                     results.push({tag: localizedTag, success: true});
                 } catch {
                     results.push({tag: localizedTag, success: false, error: 'Revalidation failed'});
