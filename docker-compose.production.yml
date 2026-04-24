@@ -24,6 +24,7 @@ services:
     restart: unless-stopped
 
   server:
+    image: localhost/ecommerce-vps_server
     build:
       context: ./apps/server
       dockerfile: Dockerfile
@@ -49,6 +50,7 @@ services:
       - redis
 
   storefront:
+    image: localhost/ecommerce-vps_storefront
     build:
       context: ./apps/storefront
       dockerfile: Dockerfile
