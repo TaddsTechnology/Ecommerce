@@ -14,6 +14,30 @@ import path from 'path';
 
 const IS_DEV = process.env.APP_ENV === 'dev';
 const serverPort = +process.env.PORT || 3000;
+const dbType = process.env.DB_TYPE || 'sqlite';
+
+const getDbConnectionOptions = () => {
+    if (dbType === 'postgres') {
+        return {
+            type: 'postgres' as const,
+            synchronize: false,
+            migrations: [path.join(__dirname, './migrations/*.+(js|ts)')],
+            logging: false,
+            host: process.env.DB_HOST || 'localhost',
+            port: parseInt(process.env.DB_PORT || '5432'),
+            database: process.env.DB_NAME || 'vendure',
+            username: process.env.DB_USERNAME || 'vendure',
+            password: process.env.DB_PASSWORD,
+        };
+    }
+    return {
+        type: 'better-sqlite3' as const,
+        synchronize: false,
+        migrations: [path.join(__dirname, './migrations/*.+(js|ts)')],
+        logging: false,
+        database: path.join(__dirname, '../vendure.sqlite'),
+    };
+};
 
 export const config: VendureConfig = {
     apiOptions: {
@@ -39,15 +63,7 @@ export const config: VendureConfig = {
           secret: process.env.COOKIE_SECRET,
         },
     },
-    dbConnectionOptions: {
-        type: 'better-sqlite3',
-        // See the README.md "Migrations" section for an explanation of
-        // the `synchronize` and `migrations` options.
-        synchronize: false,
-        migrations: [path.join(__dirname, './migrations/*.+(js|ts)')],
-        logging: false,
-        database: path.join(__dirname, '../vendure.sqlite'),
-    },
+    dbConnectionOptions: getDbConnectionOptions(),
     paymentOptions: {
         paymentMethodHandlers: [dummyPaymentHandler],
     },
@@ -67,10 +83,7 @@ export const config: VendureConfig = {
         AssetServerPlugin.init({
             route: 'assets',
             assetUploadDir: path.join(__dirname, '../static/assets'),
-            // For local dev, the correct value for assetUrlPrefix should
-            // be guessed correctly, but for production it will usually need
-            // to be set manually to match your production url.
-            assetUrlPrefix: IS_DEV ? undefined : 'https://www.my-shop.com/assets/',
+            assetUrlPrefix: process.env.ASSET_URL_PREFIX,
         }),
         DefaultSchedulerPlugin.init(),
         DefaultJobQueuePlugin.init({ useDatabaseForBuffer: true }),

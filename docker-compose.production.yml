@@ -1,0 +1,72 @@
+name: ecommerce-vps
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: ecommerce_postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: vendure
+      POSTGRES_USER: vendure
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change_me_strong_password}
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: ecommerce_redis
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+  server:
+    build:
+      context: ./apps/server
+      dockerfile: Dockerfile
+    container_name: ecommerce_server
+    environment:
+      - APP_ENV=production
+      - PORT=3000
+      - COOKIE_SECRET=${COOKIE_SECRET:-generate_new_secret_here}
+      - SUPERADMIN_USERNAME=${SUPERADMIN_USERNAME:-superadmin}
+      - SUPERADMIN_PASSWORD=${SUPERADMIN_PASSWORD:-change_superadmin_password}
+      - DB_TYPE=postgres
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=vendure
+      - DB_USERNAME=vendure
+      - DB_PASSWORD=${POSTGRES_PASSWORD:-change_me_strong_password}
+      - ASSET_URL_PREFIX=http://localhost:3000/assets/
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - redis
+
+  storefront:
+    build:
+      context: ./apps/storefront
+      dockerfile: Dockerfile
+    container_name: ecommerce_storefront
+    environment:
+      - VENDURE_SHOP_API_URL=http://server:3000/shop-api
+      - NEXT_PUBLIC_VENDURE_SHOP_API_URL=http://server:3000/shop-api
+      - NEXT_PUBLIC_SITE_URL=http://localhost:3001
+      - NEXT_PUBLIC_SITE_NAME=Ecommerce
+      - REVALIDATION_SECRET=${REVALIDATION_SECRET:-generate_new_secret_here}
+    ports:
+      - "3001:3001"
+    restart: unless-stopped
+    depends_on:
+      - server
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
