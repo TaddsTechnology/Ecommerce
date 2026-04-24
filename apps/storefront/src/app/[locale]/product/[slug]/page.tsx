@@ -61,12 +61,37 @@ export async function generateMetadata({
     const ogImage = product.assets?.[0]?.preview;
     const ogLocale = toOgLocale(locale);
     const productPath = `/product/${product.slug}`;
+    const productUrl = buildCanonicalUrl(`/${locale}${productPath}`);
+
+    const productSchema = {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": product.name,
+        "description": description || fallbackDescription,
+        "url": productUrl,
+        "image": product.assets?.map((a: { preview: string }) => a.preview) || [],
+        "sku": product.variants?.[0]?.sku,
+        "brand": {
+            "@type": "Brand",
+            "name": "BRAND"
+        },
+        "offers": product.variants?.map((variant: { id: string; name: string; sku: string; priceWithTax: number; stockLevel: string }) => ({
+            "@type": "Offer",
+            "url": productUrl,
+            "price": variant.priceWithTax,
+            "priceCurrency": "USD",
+            "availability": variant.stockLevel && parseInt(variant.stockLevel) > 0 
+                ? "https://schema.org/InStock" 
+                : "https://schema.org/OutOfStock",
+            "priceValidUntil": new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+        })) || []
+    };
 
     return {
         title: product.name,
         description: description || fallbackDescription,
         alternates: {
-            canonical: buildCanonicalUrl(`/${locale}${productPath}`),
+            canonical: productUrl,
             languages: Object.fromEntries(
                 routing.locales.map((l) => [l, buildCanonicalUrl(`/${l}${productPath}`)])
             ),
@@ -76,7 +101,7 @@ export async function generateMetadata({
             description: description || fallbackDescription,
             type: 'website',
             locale: ogLocale,
-            url: buildCanonicalUrl(`/${locale}${productPath}`),
+            url: productUrl,
             images: buildOgImages(ogImage, product.name),
         },
         twitter: {
@@ -85,6 +110,9 @@ export async function generateMetadata({
             description: description || fallbackDescription,
             images: ogImage ? [ogImage] : undefined,
         },
+        other: {
+            "script:ld+json": JSON.stringify(productSchema)
+        }
     };
 }
 

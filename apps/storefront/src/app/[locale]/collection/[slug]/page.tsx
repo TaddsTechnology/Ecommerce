@@ -18,6 +18,7 @@ import {
 import { routing } from '@/i18n/routing';
 import {
     SITE_NAME,
+    SITE_URL,
     truncateDescription,
     buildCanonicalUrl,
     buildOgImages,
@@ -68,12 +69,35 @@ export async function generateMetadata({
         t('browseCollectionAt', {name: collection.name, siteName: SITE_NAME});
     const ogLocale = toOgLocale(locale);
     const collectionPath = `/collection/${collection.slug}`;
+    const collectionUrl = buildCanonicalUrl(`/${locale}${collectionPath}`);
+    const baseUrl = SITE_URL.replace(/\/$/, '');
+    const isDefaultLocale = locale === routing.defaultLocale;
+    const homeUrl = isDefaultLocale ? baseUrl : `${baseUrl}/${locale}`;
+
+    const breadcrumbSchema = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": homeUrl
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": collection.name,
+                "item": collectionUrl
+            }
+        ]
+    };
 
     return {
         title: collection.name,
         description,
         alternates: {
-            canonical: buildCanonicalUrl(`/${locale}${collectionPath}`),
+            canonical: collectionUrl,
             languages: Object.fromEntries(
                 routing.locales.map((l) => [l, buildCanonicalUrl(`/${l}${collectionPath}`)])
             ),
@@ -83,7 +107,7 @@ export async function generateMetadata({
             description,
             type: 'website',
             locale: ogLocale,
-            url: buildCanonicalUrl(`/${locale}${collectionPath}`),
+            url: collectionUrl,
             images: buildOgImages(collection.featuredAsset?.preview, collection.name),
         },
         twitter: {
@@ -94,6 +118,9 @@ export async function generateMetadata({
                 ? [collection.featuredAsset.preview]
                 : undefined,
         },
+        other: {
+            "script:ld+json": JSON.stringify(breadcrumbSchema)
+        }
     };
 }
 

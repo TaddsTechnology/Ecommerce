@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /api/*
+Disallow: /admin
+Disallow: /account*
+
+Sitemap: https://ecommerce-storefront-xi.vercel.app/sitemap.xml

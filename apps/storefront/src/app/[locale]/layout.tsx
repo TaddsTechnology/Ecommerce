@@ -38,6 +38,11 @@ export async function generateMetadata(): Promise<Metadata> {
     const ogLocale = toOgLocale(locale);
     const t = await getTranslations({locale, namespace: 'Common'});
 
+    const baseUrl = SITE_URL.replace(/\/$/, '');
+    const isDefaultLocale = locale === routing.defaultLocale;
+    const canonicalPath = isDefaultLocale ? '/' : `/${locale}`;
+    const canonicalUrl = `${baseUrl}${canonicalPath}`;
+
     return {
         metadataBase: new URL(SITE_URL),
         title: {
@@ -65,6 +70,7 @@ export async function generateMetadata(): Promise<Metadata> {
             },
         },
         alternates: {
+            canonical: canonicalUrl,
             languages: Object.fromEntries(
                 routing.locales.map((l) => [l, `/${l}`])
             ),
