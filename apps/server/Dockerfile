@@ -22,6 +22,7 @@ RUN npm install --omit=dev --no-audit --no-fund
 
 # Copy built files
 COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/static ./static
 
 EXPOSE 3000
 
