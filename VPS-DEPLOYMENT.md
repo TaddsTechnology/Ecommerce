@@ -217,3 +217,82 @@ sudo ln -s /etc/nginx/sites-available/ecommerce /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl reload nginx
 ```
+
+---
+
+## CI/CD with GitHub Actions
+
+This section explains how to set up automatic deployment from GitHub to VPS.
+
+### Architecture
+
+```
+GitHub Push -> GitHub Actions Build -> Images pushed to GHCR -> SSH triggers VPS deploy
+```
+
+### Setup Steps
+
+#### 1. Generate SSH Key for VPS
+
+On your local machine:
+```bash
+# Generate deploy key (without passphrase)
+ssh-keygen -t ed25519 -f deploy-key -N ""
+
+# Copy public key to VPS
+ssh-copy-id -i deploy-key.pub user@YOUR_VPS_IP
+```
+
+#### 2. Add Secrets to GitHub
+
+In your GitHub repository, go to **Settings → Secrets and variables → Actions**, add these secrets:
+
+| Secret | Value |
+|--------|-------|
+| `SSH_PRIVATE_KEY` | Contents of `deploy-key` file |
+| `VPS_HOST` | Your VPS IP or hostname |
+| `VPS_USER` | Your VPS username |
+
+#### 3. Push to vps-production Branch
+
+```bash
+# Push to trigger CI/CD
+git push origin vps-production
+```
+
+The workflow will:
+1. Build both server and storefront Docker images
+2. Push images to GitHub Container Registry (GHCR)
+3. SSH into your VPS and run deployment
+
+### Manual Deploy (Alternative)
+
+If CI/CD isn't set up or fails:
+
+```bash
+# SSH into VPS
+ssh user@YOUR_VPS_IP
+
+# Login to GHCR
+podman login ghcr.io -u YOUR_GITHUB_USERNAME
+
+# Pull and restart
+podman-compose -f docker-compose.production.yml pull
+podman-compose -f docker-compose.production.yml up -d
+```
+
+### Troubleshooting CI/CD
+
+#### Check GitHub Actions logs
+Go to **Actions → Deploy workflow → Run** to see build/deploy logs.
+
+#### Check container status on VPS
+```bash
+podman-compose -f docker-compose.production.yml ps
+podman-compose -f docker-compose.production.yml logs
+```
+
+#### Rebuild manually on VPS
+```bash
+podman-compose -f docker-compose.production.yml up -d --build
+```
