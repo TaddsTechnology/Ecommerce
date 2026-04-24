@@ -86,7 +86,7 @@ services:
         max-file: "3"
 
   dozzle:
-    image: amir20/dozzle:latest
+    image: docker.io/amir20/dozzle:latest
     container_name: ecommerce_dozzle
     ports:
       - "8080:8080"
