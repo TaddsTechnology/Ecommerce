@@ -220,6 +220,94 @@ sudo systemctl reload nginx
 
 ---
 
+## Logging & Monitoring
+
+This section covers production logging and monitoring tools.
+
+### Included Tools
+
+| Tool | Purpose | Port |
+|------|---------|------|
+| **Dozzle** | Real-time container logs web UI | 8080 |
+| **Beszel** | Server monitoring (CPU/RAM/Disk) | 8081 |
+
+### Access Web UIs
+
+| Tool | URL | Purpose |
+|------|-----|---------|
+| Dozzle | http://VPS_IP:8080 | View container logs |
+| Beszel | http://VPS_IP:8081 | Server monitoring |
+
+### Using logs.sh Script
+
+```bash
+# Make executable
+chmod +x logs.sh
+
+# View all logs
+./logs.sh logs
+
+# Stream logs
+./logs.sh logs-f
+
+# View specific container
+./logs.sh server
+./logs.sh storefront
+
+# Check status
+./logs.sh status
+
+# Check resource usage
+./logs.sh stats
+
+# Restart services
+./logs.sh restart
+
+# View help
+./logs.sh help
+```
+
+### Log Rotation
+
+Each container has log rotation configured:
+- **max-size**: 10MB
+- **max-files**: 3
+
+### Manual Log Commands
+
+```bash
+# View container logs
+podman logs --tail 100 ecommerce_server
+podman logs --tail 100 ecommerce_storefront
+
+# Stream logs in real-time
+podman logs -f ecommerce_server
+
+# Check resource usage
+podman stats
+
+# View all containers
+podman ps -a
+```
+
+### Troubleshooting Logs
+
+```bash
+# Check for errors
+podman logs ecommerce_server 2>&1 | grep -i error
+podman logs ecommerce_storefront 2>&1 | grep -i error
+
+# Check last 50 lines
+podman logs --tail 50 ecommerce_server
+
+# Follow logs while testing
+podman logs -f ecommerce_server &
+# ... run your test ...
+# Press Ctrl+C to stop
+```
+
+---
+
 ## CI/CD with GitHub Actions
 
 This section explains how to set up automatic deployment from GitHub to VPS.
@@ -295,4 +383,19 @@ podman-compose -f docker-compose.production.yml logs
 #### Rebuild manually on VPS
 ```bash
 podman-compose -f docker-compose.production.yml up -d --build
+```
+
+### Log Monitoring
+
+After deploying, access the monitoring tools:
+
+| Tool | URL | Description |
+|------|-----|-------------|
+| Dozzle | http://VPS_IP:8080 | Container logs UI |
+| Beszel | http://VPS_IP:8081 | Server monitoring |
+
+```bash
+# Quick check
+./logs.sh logs
+./logs.sh stats
 ```

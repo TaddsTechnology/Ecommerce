@@ -13,6 +13,11 @@ services:
     ports:
       - "5432:5432"
     restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   redis:
     image: redis:7-alpine
@@ -22,6 +27,11 @@ services:
     ports:
       - "6379:6379"
     restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   server:
     build:
@@ -47,6 +57,11 @@ services:
     depends_on:
       - postgres
       - redis
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   storefront:
     build:
@@ -64,9 +79,47 @@ services:
     restart: unless-stopped
     depends_on:
       - server
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  dozzle:
+    image: amir20/dozzle:latest
+    container_name: ecommerce_dozzle
+    ports:
+      - "8080:8080"
+    volumes:
+      - /run/podman/podman.sock:/var/run/docker.sock
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  beszel:
+    image: henrygd/beszel
+    container_name: ecommerce_beszel
+    ports:
+      - "8081:8080"
+    volumes:
+      - beszel_data:/data
+      - /run/podman/podman.sock:/var/run/docker.sock
+    environment:
+      - BESZEL_PORT=8080
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
 volumes:
   postgres_data:
     driver: local
   redis_data:
+    driver: local
+  beszel_data:
     driver: local
