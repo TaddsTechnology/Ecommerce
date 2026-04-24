@@ -15,13 +15,14 @@ import path from 'path';
 const IS_DEV = process.env.APP_ENV === 'dev';
 const serverPort = +process.env.PORT || 3000;
 const dbType = process.env.DB_TYPE || 'sqlite';
+const shouldSynchronizeDb = process.env.DB_SYNCHRONIZE !== 'false';
 
 const getDbConnectionOptions = () => {
     if (dbType === 'postgres') {
         return {
             type: 'postgres' as const,
-            synchronize: false,
-            migrations: [path.join(__dirname, './migrations/*.+(js|ts)')],
+            synchronize: shouldSynchronizeDb,
+            migrations: shouldSynchronizeDb ? [] : [path.join(__dirname, './migrations/*.+(js|ts)')],
             logging: false,
             host: process.env.DB_HOST || 'localhost',
             port: parseInt(process.env.DB_PORT || '5432'),
