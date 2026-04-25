@@ -7,6 +7,7 @@ RUN npm install --no-audit --no-fund
 
 COPY . .
 RUN npm run build
+RUN npm run build:dashboard
 
 
 FROM node:20-alpine AS runner
