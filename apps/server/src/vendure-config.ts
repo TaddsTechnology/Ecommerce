@@ -7,6 +7,7 @@ import {
 } from '@vendure/core';
 import { defaultEmailHandlers, EmailPlugin, FileBasedTemplateLoader } from '@vendure/email-plugin';
 import { AssetServerPlugin } from '@vendure/asset-server-plugin';
+import { DashboardPlugin } from '@vendure/dashboard/plugin';
 import { GraphiqlPlugin } from '@vendure/graphiql-plugin';
 import 'dotenv/config';
 import path from 'path';
@@ -102,6 +103,10 @@ export const config: VendureConfig = {
                 passwordResetUrl: 'http://localhost:8080/password-reset',
                 changeEmailAddressUrl: 'http://localhost:8080/verify-email-address-change'
             },
+        }),
+        DashboardPlugin.init({
+            route: 'dashboard',
+            appDir: path.join(__dirname, 'dashboard'),
         }),
     ],
 };

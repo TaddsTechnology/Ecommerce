@@ -8,6 +8,7 @@
     "dev:dashboard": "vite --clearScreen false",
     "dev": "concurrently --kill-others npm:dev:*",
     "build": "tsc",
+    "build:dashboard": "vite build",
     "start:server": "node ./dist/index.js",
     "start:worker": "node ./dist/index-worker.js",
     "start": "concurrently npm:start:*"
@@ -15,11 +16,14 @@
   "dependencies": {
     "@vendure/asset-server-plugin": "3.6.2",
     "@vendure/core": "3.6.2",
+    "@vendure/dashboard": "3.6.2",
     "@vendure/email-plugin": "3.6.2",
     "@vendure/graphiql-plugin": "3.6.2",
+    "@tanstack/query-core": "^5.60.0",
     "better-sqlite3": "12.9.0",
     "dotenv": "17.4.2",
-    "pg": "^8.13.0"
+    "pg": "^8.13.0",
+    "recharts": "^2.15.3"
   },
   "devDependencies": {
     "@types/pg": "^8.11.0",
