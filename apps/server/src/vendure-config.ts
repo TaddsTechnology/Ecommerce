@@ -107,8 +107,8 @@ export const config: VendureConfig = {
         DashboardPlugin.init({
             route: 'dashboard',
             appDir: IS_DEV
-                ? path.join(__dirname, '../dist/dashboard')
-                : path.join(__dirname, '../node_modules/@vendure/dashboard/dist'),
+                ? path.join(__dirname, '../node_modules/@vendure/dashboard/dist')
+                : path.join(__dirname, '../dist/dashboard'),
         }),
     ],
 };
