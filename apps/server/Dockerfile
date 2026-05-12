@@ -2,14 +2,19 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
+# Install dependencies for building
+RUN apk add --no-cache curl
+
 COPY package*.json ./
 RUN npm install --no-audit --no-fund
 
 COPY . .
+
+# Build server
 RUN npm run build
 
-# Build dashboard with increased file limit
-RUN ulimit -n 4096 && npm run build:dashboard || echo "Dashboard build skipped"
+# Build dashboard with increased file limits
+RUN sh -c 'ulimit -n 4096 && npm run build:dashboard'
 
 FROM node:20-alpine AS runner
 
@@ -25,6 +30,7 @@ RUN npm install --omit=dev --no-audit --no-fund
 # Copy built files
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/static ./static
+COPY --from=builder /app/node_modules/@vendure/dashboard ./node_modules/@vendure/dashboard
 
 EXPOSE 3000
 

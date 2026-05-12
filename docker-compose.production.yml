@@ -73,7 +73,9 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - /run/user/1003/podman/podman.sock:/var/run/docker.sock
+      - /run/podman/podman.sock:/var/run/docker.sock
+    environment:
+      - DOZZLE_ADDR=:8080
     restart: unless-stopped
 
   beszel:
