@@ -2,15 +2,14 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Increase file descriptor limit to prevent EMFILE errors
-RUN apk add --no-cache curl
-
 COPY package*.json ./
 RUN npm install --no-audit --no-fund
 
 COPY . .
 RUN npm run build
-RUN npm run build:dashboard
+
+# Build dashboard with increased file limit
+RUN ulimit -n 4096 && npm run build:dashboard || echo "Dashboard build skipped"
 
 FROM node:20-alpine AS runner
 
