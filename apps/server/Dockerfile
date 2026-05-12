@@ -13,8 +13,8 @@ COPY . .
 # Build server
 RUN npm run build
 
-# Build dashboard with increased file limits
-RUN sh -c 'ulimit -n 4096 && npm run build:dashboard'
+# Build dashboard
+RUN npm run build:dashboard
 
 FROM node:20-alpine AS runner
 
