@@ -6,7 +6,7 @@ WORKDIR /app
 RUN apk add --no-cache curl
 
 COPY package*.json ./
-RUN npm install --no-audit --no-fund
+RUN npm ci --no-audit --no-fund
 
 COPY . .
 
@@ -25,7 +25,7 @@ ENV PORT=3000
 
 # Install only production deps
 COPY package*.json ./
-RUN npm install --omit=dev --no-audit --no-fund
+RUN npm ci --omit=dev --no-audit --no-fund
 
 # Copy built files
 COPY --from=builder /app/dist ./dist
